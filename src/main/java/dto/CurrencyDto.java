@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 
 public class CurrencyDto {
-    int id;
     String code;
     String name;
     String sign;
@@ -14,20 +13,14 @@ public class CurrencyDto {
     public CurrencyDto() {
     }
 
-    public CurrencyDto(int id, String code, String name, String sign) {
-        this.id = id;
+
+    public CurrencyDto(String code, String name, String sign) {
         this.code = code;
         this.name = name;
         this.sign = sign;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getCode() {
         return code;

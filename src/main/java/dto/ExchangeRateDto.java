@@ -23,6 +23,12 @@ public class ExchangeRateDto {
         this.rate = rate;
     }
 
+    public ExchangeRateDto(CurrencyDto baseCurrency, CurrencyDto targetCurrency, BigDecimal rate) {
+        this.baseCurrency = baseCurrency;
+        this.targetCurrency = targetCurrency;
+        this.rate = rate;
+    }
+
     public int getId() {
         return id;
     }

@@ -13,4 +13,5 @@ public interface CurrencyMapper {
     CurrencyDto toDto(Currency currency);
 
     Currency toEntity(CurrencyDto dto);
+
 }

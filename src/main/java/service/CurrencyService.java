@@ -5,6 +5,7 @@ import dto.CurrencyDto;
 import exception.NotFoundException;
 import mapper.CurrencyMapper;
 import model.Currency;
+import validation.CurrencyFormatter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,10 +26,10 @@ public class CurrencyService {
         );
     }
 
-    public CurrencyDto create(CurrencyDto currencyDto) {
-        Currency currencyToSave = mapper.toEntity(currencyDto);
-        Currency savedCurrency = dao.save(currencyToSave)
-                .orElseThrow(() -> new IllegalStateException("Ошибка при сохранении валюты")); // на случай, если Optional пустой
+    public CurrencyDto save(CurrencyDto currencyDto) {
+        CurrencyDto validDto = CurrencyFormatter.getValidCurrencyDTO(currencyDto);
+        Currency currencyToSave = mapper.toEntity(validDto);
+      Currency savedCurrency = dao.save(currencyToSave).get();
         return mapper.toDto(savedCurrency);
     }
 }

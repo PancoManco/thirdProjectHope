@@ -1,20 +1,30 @@
 import dao.CurrencyDao;
+import dto.CurrencyDto;
 import mapper.CurrencyMapper;
 import model.Currency;
 import org.mapstruct.factory.Mappers;
+import validation.CurrencyFormatter;
 
 public class Runner {
 
     public static void main(String[] args) {
 
-        var currencyDao = CurrencyDao.getInstance();
-       Currency currency = new Currency(3,"SHI","SHITCOINT","%");
-//     //   currencyDao.create(currency);
+        CurrencyDao dao = CurrencyDao.getInstance();
+       Currency currency= new Currency(200,"YYY","YFYFUDU","%");
 
-System.out.println(currencyDao.findAll());
-       CurrencyMapper INSTANCE = Mappers.getMapper(CurrencyMapper.class);
-            INSTANCE.toDto(currency);
-//        var exchangeratedao = ExchangeRateDao.getInstance();
+       CurrencyDto dto = CurrencyMapper.INSTANCE.toDto(currency);
+        System.out.println(  CurrencyMapper.INSTANCE.toDto(currency));
+        System.out.println(
+                        dto.getCode()
+        );
+        System.out.println(dto.getName());
+        System.out.println("Code");
+
+
+        System.out.println(CurrencyFormatter.getValidCode(dto.getCode()));
+
+
+        System.out.println( CurrencyFormatter.getValidCurrencyDTO(dto));
 //        System.out.println();
 //            System.out.println(exchangeratedao.getByPair("RUB","USD"));
 //        System.out.println();
