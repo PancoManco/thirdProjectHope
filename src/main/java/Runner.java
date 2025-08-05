@@ -5,6 +5,8 @@ import model.Currency;
 import org.mapstruct.factory.Mappers;
 import validation.CurrencyFormatter;
 
+import static utils.ServletUtil.sendResponse;
+
 public class Runner {
 
     public static void main(String[] args) {
@@ -25,6 +27,7 @@ public class Runner {
 
 
         System.out.println( CurrencyFormatter.getValidCurrencyDTO(dto));
+
 //        System.out.println();
 //            System.out.println(exchangeratedao.getByPair("RUB","USD"));
 //        System.out.println();

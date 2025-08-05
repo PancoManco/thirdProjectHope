@@ -9,19 +9,7 @@ import java.util.regex.Pattern;
 import static exception.ErrorMessages.ParameterError.*;
 
 public final class CurrencyFormatter {
-
-
-
     private CurrencyFormatter() {}
-
-    public static boolean validateParameters(String... parameters) {
-        for (String parameter : parameters) {
-            if (parameter == null || parameter.isBlank()) {
-                throw new InvalidParameterException(PARAMETER_CANNOT_BE_NULL_OR_EMPTY);
-            }
-        }
-        return true;
-    }
 
     public static String getValidCode(String code) {
         code = code.trim();
