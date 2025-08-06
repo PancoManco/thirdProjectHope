@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public final class DataMapper {
-    private DataMapper() {}
+    private DataMapper() {
+    }
+
     public static Currency buildCurrency(ResultSet resultSet) throws SQLException {
         return new Currency(resultSet.getInt("id"),
                 resultSet.getString("code"),

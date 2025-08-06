@@ -3,13 +3,13 @@ package validation;
 import dto.CurrencyDto;
 
 import java.security.InvalidParameterException;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.regex.Pattern;
 
 import static exception.ErrorMessages.ParameterError.*;
 
 public final class CurrencyFormatter {
-    private CurrencyFormatter() {}
+    private CurrencyFormatter() {
+    }
 
     public static String getValidCode(String code) {
         code = code.trim();
@@ -21,7 +21,7 @@ public final class CurrencyFormatter {
     }
 
     public static String getValidName(String name) {
-      name = name.trim();
+        name = name.trim();
         Pattern pattern = Pattern.compile("^[a-zA-z ]{1,30}$");
         if (!pattern.matcher(name).matches()) {
             throw new InvalidParameterException(CURRENCY_NAME_INVALID);
@@ -42,7 +42,7 @@ public final class CurrencyFormatter {
         String code = getValidCode(currencyDto.getCode());
         String fullName = getValidName(currencyDto.getName());
         String sign = getValidSign(currencyDto.getSign());
-        CurrencyDto validCurrencyDto = new CurrencyDto(code,fullName,sign);
+        CurrencyDto validCurrencyDto = new CurrencyDto(code, fullName, sign);
         return validCurrencyDto;
     }
 
@@ -74,7 +74,6 @@ public final class CurrencyFormatter {
         return true;
     }
 */
-
 
 
 }

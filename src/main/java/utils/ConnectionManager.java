@@ -21,6 +21,9 @@ public class ConnectionManager {
         initConnectionPool();
     }
 
+    private ConnectionManager() {
+    }
+
     private static void loadDriver() {
         try {
             Class.forName("org.postgresql.Driver");
@@ -57,9 +60,6 @@ public class ConnectionManager {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private ConnectionManager() {
     }
 
 }

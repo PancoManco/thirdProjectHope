@@ -10,6 +10,8 @@ import validation.CurrencyFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static exception.ErrorMessages.CURRENCY_NOT_FOUND_MESSAGE_TEMPLATE;
+
 public class CurrencyService {
     private final CurrencyDao dao = CurrencyDao.getInstance();
     private final CurrencyMapper mapper = CurrencyMapper.INSTANCE;
@@ -22,14 +24,14 @@ public class CurrencyService {
 
     public CurrencyDto getCurrencyByCode(String code) {
         return mapper.toDto(
-                dao.findByCode(code).orElseThrow(() -> new NotFoundException("Валюта с кодом '" + code + "' не найдена"))
+                dao.findByCode(code).orElseThrow(() -> new NotFoundException(CURRENCY_NOT_FOUND_MESSAGE_TEMPLATE.formatted(code)))
         );
     }
 
     public CurrencyDto save(CurrencyDto currencyDto) {
         CurrencyDto validDto = CurrencyFormatter.getValidCurrencyDTO(currencyDto);
         Currency currencyToSave = mapper.toEntity(validDto);
-      Currency savedCurrency = dao.save(currencyToSave).get();
+        Currency savedCurrency = dao.save(currencyToSave).get();
         return mapper.toDto(savedCurrency);
     }
 }

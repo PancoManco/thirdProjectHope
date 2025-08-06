@@ -16,7 +16,6 @@ public class RequestParameterUtil {
         }
         return true;
     }
-
     public static String extractTrimmedPath(HttpServletRequest request) {
         String path = request.getPathInfo();
         String trimmedPath = path.startsWith("/") ? path.substring(1) : path;

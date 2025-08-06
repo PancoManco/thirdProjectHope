@@ -2,22 +2,19 @@ import dao.CurrencyDao;
 import dto.CurrencyDto;
 import mapper.CurrencyMapper;
 import model.Currency;
-import org.mapstruct.factory.Mappers;
 import validation.CurrencyFormatter;
-
-import static utils.ServletUtil.sendResponse;
 
 public class Runner {
 
     public static void main(String[] args) {
 
         CurrencyDao dao = CurrencyDao.getInstance();
-       Currency currency= new Currency(200,"YYY","YFYFUDU","%");
+        Currency currency = new Currency(200, "YYY", "YFYFUDU", "%");
 
-       CurrencyDto dto = CurrencyMapper.INSTANCE.toDto(currency);
-        System.out.println(  CurrencyMapper.INSTANCE.toDto(currency));
+        CurrencyDto dto = CurrencyMapper.INSTANCE.toDto(currency);
+        System.out.println(CurrencyMapper.INSTANCE.toDto(currency));
         System.out.println(
-                        dto.getCode()
+                dto.getCode()
         );
         System.out.println(dto.getName());
         System.out.println("Code");
@@ -26,7 +23,7 @@ public class Runner {
         System.out.println(CurrencyFormatter.getValidCode(dto.getCode()));
 
 
-        System.out.println( CurrencyFormatter.getValidCurrencyDTO(dto));
+        System.out.println(CurrencyFormatter.getValidCurrencyDTO(dto));
 
 //        System.out.println();
 //            System.out.println(exchangeratedao.getByPair("RUB","USD"));
