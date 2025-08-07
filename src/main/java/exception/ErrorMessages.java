@@ -25,10 +25,11 @@ public class ErrorMessages {
         public static final String CURRENCY_CODE_INVALID = "Код должен содержать ровно 3 заглавные английские буквы!";
         public static final String CURRENCY_NAME_INVALID = "Имя должно содержать только английские буквы и иметь длину от 1 до 30 символов.";
         public static final String PARAMETER_CANNOT_BE_NULL_OR_EMPTY = "Поля ввода или запроса не могут пустыми или null";
+        public static final String CURRENCY_CODE_MISSING = "Код валюты отсутсвует в адресе!";
         public static final String ERROR_DUPLICATE_VALUES = "Валюта c кодом %s уже существует !";
         public static final String SERIALIZATION_ERROR_MESSAGE = "Ошибка при сериализации объекта в JSON.";
         public static final String PARAMETER_CURRENCY_CANNOT_BE_NULL_OR_EMPTY = "Код валюты отсутствует в адресе";
-
+        public static final String REQUIRED_FORM_FIELD_MISSING = "Отсутствует обязательное поле формы";
         private ParameterError() {
         }
 

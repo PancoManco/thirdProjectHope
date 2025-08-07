@@ -1,6 +1,7 @@
 package mapper;
 
 import dto.CurrencyDto;
+import dto.CurrencyDtoRequest;
 import model.Currency;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -13,5 +14,5 @@ public interface CurrencyMapper {
     CurrencyDto toDto(Currency currency);
 
     Currency toEntity(CurrencyDto dto);
-
+    Currency toEntityFromRequest(CurrencyDtoRequest dtoRequest);
 }

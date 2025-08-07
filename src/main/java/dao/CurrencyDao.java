@@ -32,13 +32,6 @@ public class CurrencyDao {
             where code = ?
             """;
 
-    private CurrencyDao() {
-    }
-
-    public static CurrencyDao getInstance() {
-        return INSTANCE;
-    }
-
     public Optional<Currency> save(Currency currency) {
         try (var connection = ConnectionPool.getConnection();
              var statement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS);
@@ -55,6 +48,7 @@ public class CurrencyDao {
         } catch (SQLException e) {
             if (UniqueConstantValidator.isUniqueConstant(e)) {
                 throw new AlreadyExistsException(ERROR_DUPLICATE_VALUES.formatted(currency.getCode()), e);
+
             }
             throw new DBException(ERROR_SAVING_CURRENCY_TEMPLATE.formatted(currency.getCode(),currency.getName(),e.getMessage()));
         }
@@ -68,15 +62,12 @@ public class CurrencyDao {
             while (result.next()) {
                 currencies.add(
                         BuilderObj.buildCurrency(result));
-
             }
             return currencies;
         } catch (SQLException e) {
             throw new DBException(ERROR_GETTING_CURRENCIES_LIST_TEMPLATE.formatted(GET_ALL_SQL,e.getMessage()));
         }
-
     }
-
     public Optional<Currency> findByCode(String code) {
         try (var connection = ConnectionPool.getConnection();
              var statement = connection.prepareStatement(GET_BY_CODE_SQL)
@@ -91,5 +82,11 @@ public class CurrencyDao {
         } catch (SQLException e) {
             throw new DBException(ERROR_FINDING_CURRENCY_BY_CODE_TEMPLATE.formatted(code,e.getMessage()));
         }
+    }
+
+    public static CurrencyDao getInstance() {
+        return INSTANCE;
+    }
+    private CurrencyDao() {
     }
 }

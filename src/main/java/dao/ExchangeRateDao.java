@@ -43,36 +43,12 @@ public class ExchangeRateDao {
             WHERE id = ?
             """;
 
-    private final static String GET_BY_PAIR_SQL = GET_ALL_SQL + """
-                where bc.code = ? and tc.code = ?
-            """;
+    private final static String GET_BY_PAIR_SQL =GET_ALL_SQL + """
+    where bc.code = ? and tc.code = ?
+""";
 
 
-    private ExchangeRateDao() {
-    }
 
-    public static ExchangeRateDao getInstance() {
-        return INSTANCE;
-    }
-
-//    public Optional<ExchangeRate> save(Currency baseCurrency, Currency targetCurrency, BigDecimal rate) {
-//        try (var connection = ConnectionPool.getConnection();
-//             var statement = connection.prepareStatement(SAVE_EXCHANGE_RATE_SQL, Statement.RETURN_GENERATED_KEYS)) {
-//            ExchangeRate exchangerate = new ExchangeRate();
-//            statement.setInt(1, baseCurrency.getId());
-//            statement.setInt(2, targetCurrency.getId());
-//            statement.setBigDecimal(3, rate);
-//            statement.executeUpdate();
-//            var keys = statement.getGeneratedKeys();
-//
-//            if (keys.next()) {
-//                exchangerate.setId(keys.getInt("id"));
-//            }
-//            return Optional.ofNullable(exchangerate);
-//        } catch (SQLException e) {
-//            throw new DBException("Ошибка при создании курса обмена валют. Проблемы с доступом к БД! ");
-//        }
-//    }
 
     public Optional<ExchangeRate> save(String baseCurrency, String targetCurrency, BigDecimal rate) {
         try (var connection = ConnectionPool.getConnection();
@@ -85,6 +61,7 @@ public class ExchangeRateDao {
             statement.setBigDecimal(3, rate);
             statement.executeUpdate();
             var keys = statement.getGeneratedKeys();
+
             if (keys.next()) {
                 exchangerate.setId(keys.getInt("id"));
             }
@@ -112,6 +89,7 @@ public class ExchangeRateDao {
         }
 
     }
+
 
     public boolean update(String basecurrencycode, String targetcurrencycode, BigDecimal rate) {
         try (var connection = ConnectionPool.getConnection();
@@ -147,5 +125,11 @@ public class ExchangeRateDao {
         } catch (SQLException e) {
             throw new DBException("Ошибка при получение пары обмена курса валют. Проблемы с доступом к БД!");
         }
+    }
+
+    public static ExchangeRateDao getInstance() {
+        return INSTANCE;
+    }
+    private ExchangeRateDao() {
     }
 }

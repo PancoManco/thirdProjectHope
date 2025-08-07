@@ -1,6 +1,7 @@
 package controller;
 
 import dto.CurrencyDto;
+import dto.CurrencyDtoRequest;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,6 +12,7 @@ import service.CurrencyService;
 import java.io.IOException;
 import java.util.List;
 
+import static exception.ErrorMessages.ParameterError.REQUIRED_FORM_FIELD_MISSING;
 import static utils.JsonUtil.toJson;
 import static utils.RequestParameterUtil.validateParameters;
 import static utils.ServletUtil.sendResponse;
@@ -31,8 +33,8 @@ public class CurrencyListServlet extends HttpServlet {
         String name = req.getParameter("name");
         String code = req.getParameter("code");
         String sign = req.getParameter("sign");
-        validateParameters(code, name, sign);
-        CurrencyDto currencyDto = new CurrencyDto(code, name, sign);
+        validateParameters(REQUIRED_FORM_FIELD_MISSING,code, name, sign);
+        CurrencyDtoRequest currencyDto = new CurrencyDtoRequest(code, name, sign);
         CurrencyDto currency = currencyService.save(currencyDto);
         sendResponse(resp, HttpServletResponse.SC_CREATED, toJson(currency));
     }

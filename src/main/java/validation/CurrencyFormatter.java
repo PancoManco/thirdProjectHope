@@ -1,6 +1,7 @@
 package validation;
 
 import dto.CurrencyDto;
+import dto.CurrencyDtoRequest;
 
 import java.security.InvalidParameterException;
 import java.util.regex.Pattern;
@@ -37,13 +38,21 @@ public final class CurrencyFormatter {
         }
         return sign;
     }
-
-    public static CurrencyDto getValidCurrencyDTO(CurrencyDto currencyDto) {
+    /*
+    public static CurrencyDto getValidCurrencyDTO(CurrencyDtoRequest currencyDto) {
         String code = getValidCode(currencyDto.getCode());
         String fullName = getValidName(currencyDto.getName());
         String sign = getValidSign(currencyDto.getSign());
         CurrencyDto validCurrencyDto = new CurrencyDto(code, fullName, sign);
         return validCurrencyDto;
     }
+    */
+
+    public static void validateCurrencyDto(CurrencyDtoRequest currencyDto) {
+        getValidCode(currencyDto.getCode());
+        getValidName(currencyDto.getName());
+        getValidSign(currencyDto.getSign());
+    }
+
 
 }

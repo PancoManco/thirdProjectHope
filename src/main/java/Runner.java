@@ -12,6 +12,9 @@ public class Runner {
         Currency currency = new Currency(200, "YYY", "YFYFUDU", "%");
 
         CurrencyDto dto = CurrencyMapper.INSTANCE.toDto(currency);
+
+        System.out.println( "id "+  dao.findByCode("FFF").get().getId());
+
         System.out.println(CurrencyMapper.INSTANCE.toDto(currency));
         System.out.println(
                 dto.getCode()
@@ -20,10 +23,12 @@ public class Runner {
         System.out.println("Code");
 
 
+
+
         System.out.println(CurrencyFormatter.getValidCode(dto.getCode()));
 
 
-        System.out.println(CurrencyFormatter.getValidCurrencyDTO(dto));
+     //   System.out.println(CurrencyFormatter.getValidCurrencyDTO(dto));
 
 //        System.out.println();
 //            System.out.println(exchangeratedao.getByPair("RUB","USD"));

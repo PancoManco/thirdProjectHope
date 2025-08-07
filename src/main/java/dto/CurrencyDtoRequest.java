@@ -1,23 +1,16 @@
 package dto;
 
-public class CurrencyDto {
-    int id;
+public class CurrencyDtoRequest {
     String code;
     String name;
     String sign;
 
-    public CurrencyDto() {
-    }
-
-    public CurrencyDto(int id,String code, String name, String sign) {
-        this.id=id;
+    public CurrencyDtoRequest(String code, String name, String sign) {
         this.code = code;
         this.name = name;
         this.sign = sign;
     }
 
-    public void setId(int id) {this.id =id;}
-    public int getId() { return id; }
     public String getCode() {
         return code;
     }
@@ -41,4 +34,5 @@ public class CurrencyDto {
     public void setSign(String sign) {
         this.sign = sign;
     }
+
 }

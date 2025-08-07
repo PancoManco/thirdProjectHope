@@ -10,6 +10,7 @@ import service.CurrencyService;
 
 import java.io.IOException;
 
+import static exception.ErrorMessages.ParameterError.CURRENCY_CODE_MISSING;
 import static utils.JsonUtil.toJson;
 import static utils.RequestParameterUtil.extractTrimmedPath;
 import static utils.ServletUtil.sendResponse;
@@ -23,7 +24,7 @@ public class CurrencyServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String code = extractTrimmedPath(req);
+        String code = extractTrimmedPath(req,CURRENCY_CODE_MISSING);
         CurrencyDto currencyDto = currencyService.getCurrencyByCode(code);
         sendResponse(resp, HttpServletResponse.SC_OK, toJson(currencyDto));
     }
