@@ -8,13 +8,11 @@ public class CurrencyDto {
     public CurrencyDto() {
     }
 
-
     public CurrencyDto(String code, String name, String sign) {
         this.code = code;
         this.name = name;
         this.sign = sign;
     }
-
 
     public String getCode() {
         return code;

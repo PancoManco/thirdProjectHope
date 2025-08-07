@@ -1,10 +1,12 @@
 package dao;
 
+import connection.ConnectionPool;
+import exception.AlreadyExistsException;
 import exception.DBException;
-import mapper.DataMapper;
+import mapper.BuilderObj;
 import model.Currency;
 import model.ExchangeRate;
-import utils.ConnectionManager;
+import utils.UniqueConstantValidator;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -13,10 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static exception.ErrorMessages.ParameterError.ERROR_DUPLICATE_VALUES;
+import static exception.ErrorMessages.ParameterError.ExchangeRatesError.ERROR_DUPLICATE_EXCHANGE_RATE_VALUES;
+
 public class ExchangeRateDao {
 
     private final static ExchangeRateDao INSTANCE = new ExchangeRateDao();
-
+    private final static CurrencyDao currencyDao = CurrencyDao.getInstance();
 
     private final static String SAVE_EXCHANGE_RATE_SQL = """
             Insert into currencydatabase.exchangerates(basecurrencyid, targetcurrencyid, rate)  
@@ -50,33 +55,56 @@ public class ExchangeRateDao {
         return INSTANCE;
     }
 
-    public Optional<ExchangeRate> save(Currency baseCurrency, Currency targetCurrency, BigDecimal rate) {
-        try (var connection = ConnectionManager.get();
+//    public Optional<ExchangeRate> save(Currency baseCurrency, Currency targetCurrency, BigDecimal rate) {
+//        try (var connection = ConnectionPool.getConnection();
+//             var statement = connection.prepareStatement(SAVE_EXCHANGE_RATE_SQL, Statement.RETURN_GENERATED_KEYS)) {
+//            ExchangeRate exchangerate = new ExchangeRate();
+//            statement.setInt(1, baseCurrency.getId());
+//            statement.setInt(2, targetCurrency.getId());
+//            statement.setBigDecimal(3, rate);
+//            statement.executeUpdate();
+//            var keys = statement.getGeneratedKeys();
+//
+//            if (keys.next()) {
+//                exchangerate.setId(keys.getInt("id"));
+//            }
+//            return Optional.ofNullable(exchangerate);
+//        } catch (SQLException e) {
+//            throw new DBException("Ошибка при создании курса обмена валют. Проблемы с доступом к БД! ");
+//        }
+//    }
+
+    public Optional<ExchangeRate> save(String baseCurrency, String targetCurrency, BigDecimal rate) {
+        try (var connection = ConnectionPool.getConnection();
              var statement = connection.prepareStatement(SAVE_EXCHANGE_RATE_SQL, Statement.RETURN_GENERATED_KEYS)) {
+           var base=  currencyDao.findByCode(baseCurrency).get();
+           var target= currencyDao.findByCode(targetCurrency).get();
             ExchangeRate exchangerate = new ExchangeRate();
-            statement.setInt(1, baseCurrency.getId());
-            statement.setInt(2, targetCurrency.getId());
+            statement.setInt(1, base.getId());
+            statement.setInt(2, target.getId());
             statement.setBigDecimal(3, rate);
             statement.executeUpdate();
             var keys = statement.getGeneratedKeys();
-
             if (keys.next()) {
                 exchangerate.setId(keys.getInt("id"));
             }
             return Optional.ofNullable(exchangerate);
         } catch (SQLException e) {
+            if (UniqueConstantValidator.isUniqueConstant(e)) {
+                throw new AlreadyExistsException(ERROR_DUPLICATE_EXCHANGE_RATE_VALUES.formatted(baseCurrency+targetCurrency), e);
+            }
             throw new DBException("Ошибка при создании курса обмена валют. Проблемы с доступом к БД! ");
         }
     }
 
     public List<ExchangeRate> getAll() {
-        try (var connection = ConnectionManager.get();
+        try (var connection = ConnectionPool.getConnection();
              var statement = connection.prepareStatement(GET_ALL_SQL)
         ) {
             List<ExchangeRate> exchangeRates = new ArrayList<>();
             var result = statement.executeQuery();
             while (result.next()) {
-                exchangeRates.add(DataMapper.buildExchangeRate(result));
+                exchangeRates.add(BuilderObj.buildExchangeRate(result));
             }
             return exchangeRates;
         } catch (SQLException e) {
@@ -86,7 +114,7 @@ public class ExchangeRateDao {
     }
 
     public boolean update(String basecurrencycode, String targetcurrencycode, BigDecimal rate) {
-        try (var connection = ConnectionManager.get();
+        try (var connection = ConnectionPool.getConnection();
              var statement = connection.prepareStatement(UPDATE_EXCHANGE_RATE_SQL)) {
             //  ExchangeRate exchangerate = getByPair(basecurrencycode,targetcurrencycode).get();
             Optional<ExchangeRate> optionalRate = getByPair(basecurrencycode, targetcurrencycode);
@@ -105,7 +133,7 @@ public class ExchangeRateDao {
     }
 
     public Optional<ExchangeRate> getByPair(String basecurrencycode, String targetcurrencycode) {
-        try (var connection = ConnectionManager.get();
+        try (var connection = ConnectionPool.getConnection();
              var statement = connection.prepareStatement(GET_BY_PAIR_SQL)
         ) {
             statement.setString(1, basecurrencycode);
@@ -113,7 +141,7 @@ public class ExchangeRateDao {
             var result = statement.executeQuery();
             ExchangeRate exchangeRate = null;
             if (result.next()) {
-                exchangeRate = DataMapper.buildExchangeRate(result);
+                exchangeRate = BuilderObj.buildExchangeRate(result);
             }
             return Optional.ofNullable(exchangeRate);
         } catch (SQLException e) {

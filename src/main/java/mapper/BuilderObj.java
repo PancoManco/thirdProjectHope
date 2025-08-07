@@ -6,8 +6,8 @@ import model.ExchangeRate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public final class DataMapper {
-    private DataMapper() {
+public final class BuilderObj {
+    private BuilderObj() {
     }
 
     public static Currency buildCurrency(ResultSet resultSet) throws SQLException {

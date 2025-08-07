@@ -46,34 +46,4 @@ public final class CurrencyFormatter {
         return validCurrencyDto;
     }
 
-/*
-    public static boolean isValidCode(String code) {
-        code = code.trim();
-        Pattern pattern = Pattern.compile("^[A-Z]{3}$");
-        if (!pattern.matcher(code).matches()) {
-            throw new InvalidParameterException(CURRENCY_CODE_INVALID);
-        }
-        return true;
-    }
-
-    public static boolean isValidName(String name) {
-        name = name.trim();
-        Pattern pattern = Pattern.compile("^[a-zA-z ]{1,30}$");
-        if (!pattern.matcher(name).matches()) {
-            throw new InvalidParameterException(CURRENCY_NAME_INVALID);
-        }
-        return true;
-    }
-
-    public static boolean isValidSign(String sign) {
-        sign = sign.trim();
-        Pattern pattern = Pattern.compile("^[^\\p{P}\\s]{1,3}$");
-        if (!pattern.matcher(sign).matches()) {
-            throw new InvalidParameterException(SIGN_INVALID);
-        }
-        return true;
-    }
-*/
-
-
 }

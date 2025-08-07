@@ -1,7 +1,10 @@
 package service;
 
+import dao.CurrencyDao;
 import dao.ExchangeRateDao;
+import dto.CurrencyDto;
 import dto.ExchangeRateDto;
+import dto.ExchangeRateRequestDto;
 import exception.NotFoundException;
 import mapper.ExchangeRateMapper;
 import model.ExchangeRate;
@@ -28,16 +31,28 @@ public class ExchangeRateService {
                         String.format("Курс обмена для пары %s -> %s не найден", baseCode, targetCode)));
 
     }
-
+    /*
     public ExchangeRateDto createExchangeRate(ExchangeRateDto dto) {
         ExchangeRate exchangeRateToSave = mapper.toEntity(dto);
         // Важно: Currency у ExchangeRate должен иметь id, иначе сохранение не пройдет!
         ExchangeRate savedRate = dao.save(
-                exchangeRateToSave.getBaseCurrency(),
-                exchangeRateToSave.getTargetCurrency(),
+                exchangeRateToSave.getBaseCurrency().getCode(),
+                exchangeRateToSave.getTargetCurrency().getCode(),
                 exchangeRateToSave.getRate()
         ).orElseThrow(() -> new IllegalStateException("Не удалось сохранить курс обмена"));
         return mapper.toDto(savedRate);
+    } */
+
+    public ExchangeRateDto createExchangeRate(ExchangeRateRequestDto requestDto) {
+         ExchangeRate exchangeRateToSave = mapper.toEntity(requestDto);
+        ExchangeRate savedRate = dao.save(
+                requestDto.getBaseCurrencyCode(),
+                requestDto.getTargetCurrencyCode(),
+                requestDto.getRate()
+        ).orElseThrow(() -> new IllegalStateException("Не удалось сохранить курс обмена"));
+        return mapper.toDto(savedRate);
+
+        //CurrencyDto
     }
 
     public boolean updateExchangeRate(String baseCode, String targetCode, BigDecimal newRate) {

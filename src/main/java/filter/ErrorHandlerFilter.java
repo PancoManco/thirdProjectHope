@@ -33,7 +33,9 @@ public class ErrorHandlerFilter extends HttpFilter {
         } catch (AlreadyExistsException e) {
             handleException(res, HttpServletResponse.SC_CONFLICT, e.getMessage());
         }
-
+        catch (Exception e) {
+            handleException(res, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+        }
     }
 
     private void handleException(HttpServletResponse res, int statusCode, String message) throws IOException {

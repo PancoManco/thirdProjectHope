@@ -3,6 +3,8 @@ package utils;
 import java.io.IOException;
 import java.util.Properties;
 
+import static exception.ErrorMessages.DataBaseError.CONFIGURATION_LOAD_ERROR;
+
 public final class PropertiesUtil {
     private static final Properties PROPERTIES = new Properties();
     static {
@@ -15,7 +17,7 @@ public final class PropertiesUtil {
             PROPERTIES.load(inputStream);
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(CONFIGURATION_LOAD_ERROR);
         }
     }
     public static String get(String key) {

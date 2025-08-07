@@ -9,33 +9,38 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public final class ConnectionPool implements AutoCloseable{
+import static exception.ErrorMessages.DataBaseError.ERROR_CONNECTION_POOL;
+import static exception.ErrorMessages.DataBaseError.ERROR_LOADING_PROPERTIES;
 
-    private static HikariConfig config = new HikariConfig(ConnectionPool.class.getClassLoader().getResourceAsStream("hikari.properties"));
-    private static HikariDataSource ds;
+public final class ConnectionPool {
+
+    private static HikariConfig config = new HikariConfig();
+    private static final HikariDataSource dataSource;
 
     static {
         try {
-            ds = new HikariDataSource(config);
+            config.setJdbcUrl(PropertiesUtil.get("db.url"));
+            config.setUsername(PropertiesUtil.get("db.username"));
+            config.setPassword(PropertiesUtil.get("db.password"));
+            config.setDriverClassName(PropertiesUtil.get("db.driver"));
+            config.setMaximumPoolSize(Integer.parseInt(PropertiesUtil.get("hikari.maximum.pool.size")));
+            config.setMinimumIdle(Integer.parseInt(PropertiesUtil.get("hikari.minimum.idle")));
+            config.setConnectionTimeout(Integer.parseInt(PropertiesUtil.get("hikari.connection.timeout")));
+            config.setIdleTimeout(Integer.parseInt(PropertiesUtil.get("hikari.idle.connection.timeout")));
+            dataSource = new HikariDataSource(config);
         } catch (Exception e) {
-            throw new DBException("Ошибка при загрузке конфигурации" + e.getMessage());
+            throw new DBException(ERROR_LOADING_PROPERTIES);
         }
     }
 
     public static Connection getConnection() {
         try {
-           return ds.getConnection();
+           return dataSource.getConnection();
         } catch (SQLException e) {
-            throw new DBException("Ошибка получения соединения пула " + e.getMessage());
+            throw new DBException(ERROR_CONNECTION_POOL);
         }
     }
     private ConnectionPool() {
     }
 
-    @java.lang.Override
-    public void close() throws Exception {
-        if (ds != null && !ds.isClosed()) {
-            ds.close();
-        }
-    }
 }

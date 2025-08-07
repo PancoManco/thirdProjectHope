@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import static exception.ErrorMessages.ParameterError.SERIALIZATION_ERROR_MESSAGE;
+
 public final class JsonUtil {
 
     private static final String ERROR_MESSAGE_JSON_NAME = "message";
@@ -16,7 +18,8 @@ public final class JsonUtil {
         try {
             return mapper.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Произошла ошибка при сериализации в JSON", e);
+            throw new IllegalArgumentException(SERIALIZATION_ERROR_MESSAGE  +
+                                               obj.getClass().getName(), e);
         }
     }
 

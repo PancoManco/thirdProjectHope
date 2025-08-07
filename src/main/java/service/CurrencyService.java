@@ -5,6 +5,7 @@ import dto.CurrencyDto;
 import exception.NotFoundException;
 import mapper.CurrencyMapper;
 import model.Currency;
+import utils.RequestParameterUtil;
 import validation.CurrencyFormatter;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class CurrencyService {
     }
 
     public CurrencyDto getCurrencyByCode(String code) {
+
         return mapper.toDto(
                 dao.findByCode(code).orElseThrow(() -> new NotFoundException(CURRENCY_NOT_FOUND_MESSAGE_TEMPLATE.formatted(code)))
         );

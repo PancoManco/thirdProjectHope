@@ -3,9 +3,8 @@ package dao;
 import connection.ConnectionPool;
 import exception.AlreadyExistsException;
 import exception.DBException;
-import mapper.DataMapper;
+import mapper.BuilderObj;
 import model.Currency;
-import utils.ConnectionManager;
 import utils.UniqueConstantValidator;
 
 import java.sql.SQLException;
@@ -68,7 +67,7 @@ public class CurrencyDao {
             var result = statement.executeQuery();
             while (result.next()) {
                 currencies.add(
-                        DataMapper.buildCurrency(result));
+                        BuilderObj.buildCurrency(result));
 
             }
             return currencies;
@@ -86,7 +85,7 @@ public class CurrencyDao {
             var result = statement.executeQuery();
             Currency currency = null;
             if (result.next()) {
-                currency = DataMapper.buildCurrency(result);
+                currency = BuilderObj.buildCurrency(result);
             }
             return Optional.ofNullable(currency);
         } catch (SQLException e) {

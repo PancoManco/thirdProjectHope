@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class ConnectionManager {
+public class ConnectionManager_deprecated {
 
     private static final String URL_KEY = "db.url";
     private static final String USERNAME_KEY = "db.username";
@@ -21,7 +21,7 @@ public class ConnectionManager {
         initConnectionPool();
     }
 
-    private ConnectionManager() {
+    private ConnectionManager_deprecated() {
     }
 
     private static void loadDriver() {
@@ -38,7 +38,7 @@ public class ConnectionManager {
         pool = new ArrayBlockingQueue<>(size);
         for (int i = 0; i < size; i++) {
             Connection connection = open();
-            var proxyConnection = (Connection) Proxy.newProxyInstance(ConnectionManager.class.getClassLoader(),
+            var proxyConnection = (Connection) Proxy.newProxyInstance(ConnectionManager_deprecated.class.getClassLoader(),
                     new Class[]{Connection.class},
                     (proxy, method, args) -> method.getName().equals("close")
                             ? pool.add((Connection) proxy) : method.invoke(connection, args));

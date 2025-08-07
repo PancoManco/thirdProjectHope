@@ -8,6 +8,7 @@ import static exception.ErrorMessages.ParameterError.PARAMETER_CANNOT_BE_NULL_OR
 
 public class RequestParameterUtil {
 
+
     public static boolean validateParameters(String... parameters) {
         for (String parameter : parameters) {
             if (parameter == null || parameter.isBlank()) {

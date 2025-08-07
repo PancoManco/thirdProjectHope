@@ -4,8 +4,10 @@ public class ErrorMessages {
     private ErrorMessages() {
     }
         public static class DataBaseError {
-        public static final String DATABASE_ERROR = "Database Error";
 
+            public static final String ERROR_LOADING_PROPERTIES= "Ошибка при загрузке конфигурации из properties";
+            public static final String ERROR_CONNECTION_POOL= "Ошибка при получении соединения из пула";
+            public static final String CONFIGURATION_LOAD_ERROR = "Ошибка загрузки настроек из файла db.properties.";
         }
 
         public static class CurrencyError {
@@ -16,7 +18,7 @@ public class ErrorMessages {
             public static final String ERROR_FINDING_CURRENCY_BY_CODE_TEMPLATE =
                     "Ошибка при поиске валюты по коду: %s. Детали: %s";
         }   public static final String CURRENCY_NOT_FOUND_MESSAGE_TEMPLATE =
-            "Валюта с кодом '%s' не найдена";
+                    "Валюта с кодом '%s' не найдена";
 
     public static class ParameterError {
         public static final String SIGN_INVALID = "Знак валюты должен содержать от 1 до 3 символов, включая только буквы и цифры без пробелов и пунктуации.";
@@ -24,8 +26,15 @@ public class ErrorMessages {
         public static final String CURRENCY_NAME_INVALID = "Имя должно содержать только английские буквы и иметь длину от 1 до 30 символов.";
         public static final String PARAMETER_CANNOT_BE_NULL_OR_EMPTY = "Поля ввода или запроса не могут пустыми или null";
         public static final String ERROR_DUPLICATE_VALUES = "Валюта c кодом %s уже существует !";
+        public static final String SERIALIZATION_ERROR_MESSAGE = "Ошибка при сериализации объекта в JSON.";
+        public static final String PARAMETER_CURRENCY_CANNOT_BE_NULL_OR_EMPTY = "Код валюты отсутствует в адресе";
 
         private ParameterError() {
+        }
+
+        public static class ExchangeRatesError {
+            public static final String ERROR_DUPLICATE_EXCHANGE_RATE_VALUES="Конвертация %s уже существует!";
+
         }
     }
 }

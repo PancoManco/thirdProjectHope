@@ -1,6 +1,7 @@
 package mapper;
 
 import dto.ExchangeRateDto;
+import dto.ExchangeRateRequestDto;
 import model.ExchangeRate;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -12,4 +13,5 @@ public interface ExchangeRateMapper {
     ExchangeRateDto toDto(ExchangeRate exchangeRate);
 
     ExchangeRate toEntity(ExchangeRateDto dto);
+    ExchangeRate toEntity(ExchangeRateRequestDto requestDto);
 }
