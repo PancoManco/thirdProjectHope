@@ -7,6 +7,7 @@ import mapper.BuilderObj;
 import model.Currency;
 import model.ExchangeRate;
 import utils.UniqueConstantValidator;
+import validation.CurrencyFormatter;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 import static exception.ErrorMessages.ParameterError.ERROR_DUPLICATE_VALUES;
 import static exception.ErrorMessages.ParameterError.ExchangeRatesError.ERROR_DUPLICATE_EXCHANGE_RATE_VALUES;
+import static validation.CurrencyFormatter.validateCurrenciesExistence;
 
 public class ExchangeRateDao {
 
@@ -47,25 +49,21 @@ public class ExchangeRateDao {
     where bc.code = ? and tc.code = ?
 """;
 
-
-
-
     public Optional<ExchangeRate> save(String baseCurrency, String targetCurrency, BigDecimal rate) {
         try (var connection = ConnectionPool.getConnection();
              var statement = connection.prepareStatement(SAVE_EXCHANGE_RATE_SQL, Statement.RETURN_GENERATED_KEYS)) {
-           var base=  currencyDao.findByCode(baseCurrency).get();
-           var target= currencyDao.findByCode(targetCurrency).get();
-            ExchangeRate exchangerate = new ExchangeRate();
+            validateCurrenciesExistence(baseCurrency, targetCurrency);
+            Currency base = currencyDao.findByCode(baseCurrency).get();
+            Currency target = currencyDao.findByCode(targetCurrency).get();
             statement.setInt(1, base.getId());
             statement.setInt(2, target.getId());
             statement.setBigDecimal(3, rate);
             statement.executeUpdate();
             var keys = statement.getGeneratedKeys();
-
-            if (keys.next()) {
-                exchangerate.setId(keys.getInt("id"));
+           if (keys.next()) {
+               return  Optional.ofNullable(new ExchangeRate(keys.getInt("id"),base,target,rate));
             }
-            return Optional.ofNullable(exchangerate);
+            return Optional.empty();
         } catch (SQLException e) {
             if (UniqueConstantValidator.isUniqueConstant(e)) {
                 throw new AlreadyExistsException(ERROR_DUPLICATE_EXCHANGE_RATE_VALUES.formatted(baseCurrency+targetCurrency), e);

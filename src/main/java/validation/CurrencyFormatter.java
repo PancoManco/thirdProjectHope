@@ -1,17 +1,23 @@
 package validation;
 
+import dao.CurrencyDao;
 import dto.CurrencyDto;
 import dto.CurrencyDtoRequest;
+import exception.NotFoundException;
+import model.Currency;
 
 import java.security.InvalidParameterException;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import static exception.ErrorMessages.ParameterError.*;
 
 public final class CurrencyFormatter {
-    private CurrencyFormatter() {
-    }
+   private static CurrencyDao currencyDao= CurrencyDao.getInstance();
 
+    private CurrencyFormatter() {
+
+    }
     public static String getValidCode(String code) {
         code = code.trim();
         Pattern pattern = Pattern.compile("^[A-Z]{3}$");
@@ -38,15 +44,6 @@ public final class CurrencyFormatter {
         }
         return sign;
     }
-    /*
-    public static CurrencyDto getValidCurrencyDTO(CurrencyDtoRequest currencyDto) {
-        String code = getValidCode(currencyDto.getCode());
-        String fullName = getValidName(currencyDto.getName());
-        String sign = getValidSign(currencyDto.getSign());
-        CurrencyDto validCurrencyDto = new CurrencyDto(code, fullName, sign);
-        return validCurrencyDto;
-    }
-    */
 
     public static void validateCurrencyDto(CurrencyDtoRequest currencyDto) {
         getValidCode(currencyDto.getCode());
@@ -54,5 +51,11 @@ public final class CurrencyFormatter {
         getValidSign(currencyDto.getSign());
     }
 
-
+    public static void validateCurrenciesExistence(String baseCurrency, String targetCurrency)  {
+        Optional<Currency> baseOpt = currencyDao.findByCode(baseCurrency);
+        Optional<Currency> targetOpt = currencyDao.findByCode(targetCurrency);
+        if (!baseOpt.isPresent() || !targetOpt.isPresent()) {
+            throw new NotFoundException("Валюта '" + baseCurrency + "' или '" + targetCurrency + "' отсутствует в базе данных. Од");
+        }
+    }
 }

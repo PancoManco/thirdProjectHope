@@ -30,6 +30,7 @@ public class ErrorMessages {
         public static final String SERIALIZATION_ERROR_MESSAGE = "Ошибка при сериализации объекта в JSON.";
         public static final String PARAMETER_CURRENCY_CANNOT_BE_NULL_OR_EMPTY = "Код валюты отсутствует в адресе";
         public static final String REQUIRED_FORM_FIELD_MISSING = "Отсутствует обязательное поле формы";
+        public static final String STRING_TO_PARSE_IS_INVALID = "Не удалось конвертировать введенную строку в число";
         private ParameterError() {
         }
 

@@ -23,7 +23,7 @@ public class CurrencyServlet extends HttpServlet {
     private CurrencyService currencyService = new CurrencyService();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
         String code = extractTrimmedPath(req,CURRENCY_CODE_MISSING);
         CurrencyDto currencyDto = currencyService.getCurrencyByCode(code);
         sendResponse(resp, HttpServletResponse.SC_OK, toJson(currencyDto));

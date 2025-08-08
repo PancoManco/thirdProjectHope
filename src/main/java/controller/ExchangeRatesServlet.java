@@ -17,26 +17,27 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static utils.JsonUtil.toJson;
+import static utils.RequestParameterUtil.extractBigDecimal;
 import static utils.ServletUtil.sendResponse;
 
 @WebServlet("/exchangeRates")
 public class ExchangeRatesServlet extends HttpServlet {
     ExchangeRateService exchangeRateService = new ExchangeRateService();
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         List<ExchangeRateDto> exchangeRates = exchangeRateService.getAllExchangeRates();
         sendResponse(resp, HttpServletResponse.SC_OK, toJson(exchangeRates));
 
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     String baseCurrency = req.getParameter("baseCurrencyCode");
     String targetCode = req.getParameter("targetCurrencyCode");
     String inputRate = req.getParameter("rate");
-    BigDecimal rate = new BigDecimal(inputRate);// добавить проверку на числа
+    BigDecimal rate = extractBigDecimal(inputRate);// добавить проверку на числа
         ExchangeRateRequestDto exchangeRateRequestDto = new ExchangeRateRequestDto(baseCurrency, targetCode, rate);
     ExchangeRateDto exchangeRateDto =exchangeRateService.createExchangeRate(exchangeRateRequestDto);
-
+    sendResponse(resp,HttpServletResponse.SC_OK,toJson(exchangeRateDto));
     }
 }

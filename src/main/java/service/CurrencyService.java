@@ -30,12 +30,7 @@ public class CurrencyService {
         );
     }
 
-//    public CurrencyDto save(CurrencyDtoRequest currencyDto) {
-//        CurrencyDto validDto = CurrencyFormatter.getValidCurrencyDTO(currencyDto);
-//        Currency currencyToSave = mapper.toEntity(validDto);
-//        Currency savedCurrency = dao.save(currencyToSave).get();
-//        return mapper.toDto(savedCurrency);
-//    }
+
 public CurrencyDto save(CurrencyDtoRequest currencyDto) {
     CurrencyFormatter.validateCurrencyDto(currencyDto); // просто проверка
     Currency currencyToSave = mapper.toEntityFromRequest(currencyDto); // mapper берет request и строит entity
