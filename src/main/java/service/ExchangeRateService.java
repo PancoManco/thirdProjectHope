@@ -35,6 +35,9 @@ public class ExchangeRateService {
     }
 
     public ExchangeRateDto createExchangeRate(ExchangeRateRequestDto requestDto) {
+        if (requestDto.getBaseCurrencyCode().equalsIgnoreCase(requestDto.getTargetCurrencyCode())) {
+            throw new IllegalArgumentException("Нельзя создавать валютную пару из одной и той же валюты");
+        }
         ExchangeRate savedRate = dao.save(
                 requestDto.getBaseCurrencyCode(),
                 requestDto.getTargetCurrencyCode(),

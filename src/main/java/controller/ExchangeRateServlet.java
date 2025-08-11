@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import service.ExchangeRateService;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -33,9 +34,28 @@ public class ExchangeRateServlet extends HttpServlet {
     @Override
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+
+        BufferedReader reader = req.getReader();
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line);
+        }
+        String body = sb.toString();
+        System.out.println("Request body: " + body);
+        String[] params = body.split("&");
+        String rateValue = null;
+        for (String param : params) {
+            if (param.startsWith("rate=")) {
+                rateValue = param.substring("rate=".length());
+                break;
+            }
+        }
+
+
         String codes = extractTrimmedPath(req,"Отсутсвует нужное поле формы");
-        String inputRate = req.getParameter("rate");
-        BigDecimal rate = extractBigDecimal(inputRate);
+        //    String inputRate = req.getParameter("rate");
+        BigDecimal rate = extractBigDecimal(rateValue);
 
         ExchangeRateDto exchangeRate = exchangeRateService.updateExchangeRate(codes, rate);
         sendResponse(resp, HttpServletResponse.SC_OK, toJson(exchangeRate));

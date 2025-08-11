@@ -27,7 +27,6 @@ public class ExchangeRatesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         List<ExchangeRateDto> exchangeRates = exchangeRateService.getAllExchangeRates();
         sendResponse(resp, HttpServletResponse.SC_CREATED, toJson(exchangeRates));
-
     }
 
     @Override

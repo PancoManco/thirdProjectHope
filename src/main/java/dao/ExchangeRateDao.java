@@ -85,7 +85,6 @@ public class ExchangeRateDao {
         } catch (SQLException e) {
             throw new DBException("Ошибка при получение списка курса обмена валют.Проблемы с доступом к БД!");
         }
-
     }
 
 
