@@ -19,7 +19,7 @@ public class RequestParameterUtil {
         return true;
     }
     public static BigDecimal extractBigDecimal(String parameter) {
-        validateParameters(REQUIRED_FORM_FIELD_MISSING, parameter);
+       // validateParameters(REQUIRED_FORM_FIELD_MISSING, parameter);
         parameter = parameter.replace(",", ".").replaceAll("\\s", "");
         BigDecimal number;
         try {

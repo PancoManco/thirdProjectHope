@@ -1,32 +1,20 @@
 import dao.CurrencyDao;
+import dao.ExchangeRateDao;
 import dto.CurrencyDto;
 import mapper.CurrencyMapper;
 import model.Currency;
+import model.ExchangeRate;
 import validation.CurrencyFormatter;
+
+import java.math.BigDecimal;
 
 public class Runner {
 
     public static void main(String[] args) {
 
-        CurrencyDao dao = CurrencyDao.getInstance();
-        Currency currency = new Currency(200, "YYY", "YFYFUDU", "%");
-
-        CurrencyDto dto = CurrencyMapper.INSTANCE.toDto(currency);
-
-        System.out.println( "id "+  dao.findByCode("FFF").get().getId());
-
-        System.out.println(CurrencyMapper.INSTANCE.toDto(currency));
-        System.out.println(
-                dto.getCode()
-        );
-        System.out.println(dto.getName());
-        System.out.println("Code");
-
-
-
-
-        System.out.println(CurrencyFormatter.getValidCode(dto.getCode()));
-
+        ExchangeRateDao dao = ExchangeRateDao.getInstance();
+        BigDecimal big = new BigDecimal("1.23456");
+        dao.update("USD","2",big);
 
      //   System.out.println(CurrencyFormatter.getValidCurrencyDTO(dto));
 

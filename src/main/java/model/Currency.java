@@ -12,8 +12,9 @@ public class Currency {
     public Currency(int id, String code, String name, String sign) {
 
         this.id = id;
-        this.code = code;
         this.name = name;
+        this.code = code;
+
         this.sign = sign;
     }
 

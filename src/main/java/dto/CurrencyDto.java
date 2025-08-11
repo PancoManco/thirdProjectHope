@@ -2,8 +2,9 @@ package dto;
 
 public class CurrencyDto {
     int id;
-    String code;
     String name;
+    String code;
+
     String sign;
 
     public CurrencyDto() {

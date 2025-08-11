@@ -28,6 +28,4 @@ public class CurrencyServlet extends HttpServlet {
         CurrencyDto currencyDto = currencyService.getCurrencyByCode(code);
         sendResponse(resp, HttpServletResponse.SC_OK, toJson(currencyDto));
     }
-
-
 }

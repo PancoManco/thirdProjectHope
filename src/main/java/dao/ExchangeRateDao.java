@@ -89,10 +89,10 @@ public class ExchangeRateDao {
     }
 
 
-    public boolean update(String basecurrencycode, String targetcurrencycode, BigDecimal rate) {
+    public ExchangeRate update(String basecurrencycode, String targetcurrencycode, BigDecimal rate) {
         try (var connection = ConnectionPool.getConnection();
              var statement = connection.prepareStatement(UPDATE_EXCHANGE_RATE_SQL)) {
-            //  ExchangeRate exchangerate = getByPair(basecurrencycode,targetcurrencycode).get();
+
             Optional<ExchangeRate> optionalRate = getByPair(basecurrencycode, targetcurrencycode);
             if (optionalRate.isEmpty()) {
                 throw new DBException("Курс обмена не найден для пары: " + basecurrencycode + " → " + targetcurrencycode);
@@ -100,12 +100,12 @@ public class ExchangeRateDao {
             ExchangeRate exchangerate = optionalRate.get();
             statement.setBigDecimal(1, rate);
             statement.setInt(2, exchangerate.getId());
+            statement.executeUpdate();
             exchangerate.setRate(rate);
-            return statement.executeUpdate() > 0;
+            return exchangerate;
         } catch (SQLException e) {
             throw new DBException("Ошибка при обновление курса обмена валют.Проблемы с доступом к БД!");
         }
-
     }
 
     public Optional<ExchangeRate> getByPair(String basecurrencycode, String targetcurrencycode) {
