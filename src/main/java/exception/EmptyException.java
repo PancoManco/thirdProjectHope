@@ -16,5 +16,4 @@ public class EmptyException extends RuntimeException {
     public EmptyException(Throwable cause) {
         super(cause);
     }
-
 }

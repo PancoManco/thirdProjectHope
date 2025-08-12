@@ -8,7 +8,7 @@ import dto.ExchangeRateRequestDto;
 import exception.NotFoundException;
 import mapper.ExchangeRateMapper;
 import model.ExchangeRate;
-import validation.ExchangeRateFormatter;
+import Formatter.ExchangeRateFormatter;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -53,5 +53,9 @@ public class ExchangeRateService {
 
     }
 
+    public Optional<ExchangeRateDto> fetchExchangeRate(String baseCurrencyCode, String targetCurrencyCode) {
+        Optional<ExchangeRate> optExchangeRate = dao.getByPair(baseCurrencyCode, targetCurrencyCode);
+        return optExchangeRate.map(ExchangeRateMapper.INSTANCE::toDto);
+    }
 
 }

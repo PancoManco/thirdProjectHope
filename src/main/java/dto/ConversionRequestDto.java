@@ -2,17 +2,16 @@ package dto;
 
 import java.math.BigDecimal;
 
-public class ExchangeRateRequestDto {
+public class ConversionRequestDto {
 
     private String baseCurrencyCode;
     private String targetCurrencyCode;
-    private BigDecimal rate;
-    public ExchangeRateRequestDto(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
+    private BigDecimal baseAmount;
+
+    public ConversionRequestDto(String baseCurrencyCode, String targetCurrencyCode, BigDecimal baseAmount) {
         this.baseCurrencyCode = baseCurrencyCode;
         this.targetCurrencyCode = targetCurrencyCode;
-        this.rate = rate;
-    }
-    public ExchangeRateRequestDto() {
+        this.baseAmount = baseAmount;
     }
 
     public String getBaseCurrencyCode() {
@@ -31,13 +30,11 @@ public class ExchangeRateRequestDto {
         this.targetCurrencyCode = targetCurrencyCode;
     }
 
-    public BigDecimal getRate() {
-        return rate;
+    public BigDecimal getBaseAmount() {
+        return baseAmount;
     }
 
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
+    public void setBaseAmount(BigDecimal baseAmount) {
+        this.baseAmount = baseAmount;
     }
-
-
 }

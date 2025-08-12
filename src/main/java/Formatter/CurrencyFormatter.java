@@ -1,7 +1,6 @@
-package validation;
+package Formatter;
 
 import dao.CurrencyDao;
-import dto.CurrencyDto;
 import dto.CurrencyDtoRequest;
 import exception.NotFoundException;
 import model.Currency;
@@ -13,11 +12,9 @@ import java.util.regex.Pattern;
 import static exception.ErrorMessages.ParameterError.*;
 
 public final class CurrencyFormatter {
+
    private static CurrencyDao currencyDao= CurrencyDao.getInstance();
 
-    private CurrencyFormatter() {
-
-    }
     public static String getValidCode(String code) {
         code = code.trim();
         Pattern pattern = Pattern.compile("^[A-Z]{3}$");
@@ -29,7 +26,7 @@ public final class CurrencyFormatter {
 
     public static String getValidName(String name) {
         name = name.trim();
-        Pattern pattern = Pattern.compile("^[a-zA-z ]{1,30}$");
+        Pattern pattern = Pattern.compile("^(?!.*--)[a-zA-Z-]{1,30}$");
         if (!pattern.matcher(name).matches()) {
             throw new InvalidParameterException(CURRENCY_NAME_INVALID);
         }
@@ -44,11 +41,20 @@ public final class CurrencyFormatter {
         }
         return sign;
     }
-
+// todo ????
     public static void validateCurrencyDto(CurrencyDtoRequest currencyDto) {
         getValidCode(currencyDto.getCode());
         getValidName(currencyDto.getName());
         getValidSign(currencyDto.getSign());
+    }
+
+    ///  todo need to use
+    public static CurrencyDtoRequest getValidCurrencyDTO(CurrencyDtoRequest creatingRequest) {
+        String code = getValidCode(creatingRequest.getCode());
+        String fullName = getValidName(creatingRequest.getName());
+        String sign = getValidSign(creatingRequest.getSign());
+
+        return new CurrencyDtoRequest(code, fullName, sign);
     }
 
     public static void validateCurrenciesExistence(String baseCurrency, String targetCurrency)  {
@@ -57,5 +63,8 @@ public final class CurrencyFormatter {
         if (!baseOpt.isPresent() || !targetOpt.isPresent()) {
             throw new NotFoundException("Валюта '" + baseCurrency + "' или '" + targetCurrency + "' отсутствует в базе данных. Од");
         }
+    }
+
+    private CurrencyFormatter() {
     }
 }

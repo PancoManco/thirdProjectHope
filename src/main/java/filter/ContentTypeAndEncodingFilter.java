@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpFilter;
 import java.io.IOException;
 
 
-public class ContenTypeAndEncodingFilter extends HttpFilter {
+public class ContentTypeAndEncodingFilter extends HttpFilter {
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {

@@ -6,8 +6,7 @@ import dto.CurrencyDtoRequest;
 import exception.NotFoundException;
 import mapper.CurrencyMapper;
 import model.Currency;
-import utils.RequestParameterUtil;
-import validation.CurrencyFormatter;
+import Formatter.CurrencyFormatter;
 
 import java.util.List;
 import java.util.stream.Collectors;

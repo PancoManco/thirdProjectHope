@@ -6,18 +6,17 @@ import model.ExchangeRate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public final class BuilderObj {
-    private BuilderObj() {
+public final class DBObjectMapper {
+    private DBObjectMapper() {
     }
-
-    public static Currency buildCurrency(ResultSet resultSet) throws SQLException {
+    public static Currency mapToCurrency(ResultSet resultSet) throws SQLException {
         return new Currency(resultSet.getInt("id"),
                 resultSet.getString("code"),
                 resultSet.getString("fullname"),
                 resultSet.getString("sign"));
     }
 
-    public static ExchangeRate buildExchangeRate(ResultSet rs) throws SQLException {
+    public static ExchangeRate mapToExchangeRate(ResultSet rs) throws SQLException {
         Currency baseCurrency = new Currency(
                 rs.getInt("basecurrencyid"),
                 rs.getString("base_currency_code"),

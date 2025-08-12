@@ -1,11 +1,10 @@
 package dto;
 
 public class CurrencyDto {
-    int id;
-    String name;
-    String code;
-
-    String sign;
+    private int id;
+    private String name;
+    private  String code;
+    private  String sign;
 
     public CurrencyDto() {
     }

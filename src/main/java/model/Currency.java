@@ -1,10 +1,10 @@
 package model;
 
 public class Currency {
-    int id;
-    String code;
-    String name;
-    String sign;
+   private int id;
+    private String code;
+    private String name;
+    private String sign;
 
     public Currency() {
     }

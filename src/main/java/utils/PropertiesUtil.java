@@ -15,7 +15,6 @@ public final class PropertiesUtil {
     private static void loadProperties() {
         try (var inputStream = PropertiesUtil.class.getClassLoader().getResourceAsStream("db.properties");) {
             PROPERTIES.load(inputStream);
-
         } catch (IOException e) {
             throw new RuntimeException(CONFIGURATION_LOAD_ERROR);
         }

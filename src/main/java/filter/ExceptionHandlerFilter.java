@@ -1,6 +1,6 @@
 package filter;
 
-import exception.AlreadyExistsException;
+import exception.DuplicateEntryException;
 import exception.DBException;
 import exception.EmptyException;
 import exception.NotFoundException;
@@ -18,26 +18,25 @@ import static utils.JsonUtil.errorToJson;
 import static utils.ServletUtil.sendResponse;
 
 @WebFilter("/*")
-public class ErrorHandlerFilter extends HttpFilter {
-
+public class ExceptionHandlerFilter extends HttpFilter {
     @Override
     public void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
         try {
             chain.doFilter(req, res);
         } catch (EmptyException | InvalidParameterException e) {
-            handleException(res, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            sendErrorResponse(res, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (DBException e) {
-            handleException(res, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            sendErrorResponse(res, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         } catch (NotFoundException e) {
-            handleException(res, HttpServletResponse.SC_NOT_FOUND, e.getMessage());
-        } catch (AlreadyExistsException e) {
-            handleException(res, HttpServletResponse.SC_CONFLICT, e.getMessage());
+            sendErrorResponse(res, HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntryException e) {
+            sendErrorResponse(res, HttpServletResponse.SC_CONFLICT, e.getMessage());
         }
         catch (Exception e) {
-            handleException(res, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+            sendErrorResponse(res, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
-    private void handleException(HttpServletResponse res, int statusCode, String message) throws IOException {
+    private void sendErrorResponse(HttpServletResponse res, int statusCode, String message) throws IOException {
         sendResponse(res, statusCode, errorToJson(message));
     }
 

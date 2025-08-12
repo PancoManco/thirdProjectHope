@@ -1,13 +1,13 @@
 package dao;
 
 import connection.ConnectionPool;
-import exception.AlreadyExistsException;
+import exception.DuplicateEntryException;
 import exception.DBException;
-import mapper.BuilderObj;
+import exception.NotFoundException;
+import mapper.DBObjectMapper;
 import model.Currency;
 import model.ExchangeRate;
 import utils.UniqueConstantValidator;
-import validation.CurrencyFormatter;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -16,13 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static exception.ErrorMessages.ParameterError.ERROR_DUPLICATE_VALUES;
-import static exception.ErrorMessages.ParameterError.ExchangeRatesError.ERROR_DUPLICATE_EXCHANGE_RATE_VALUES;
-import static validation.CurrencyFormatter.validateCurrenciesExistence;
+import static exception.ErrorMessages.ParameterError.ExchangeRatesError.*;
 
 public class ExchangeRateDao {
-
     private final static ExchangeRateDao INSTANCE = new ExchangeRateDao();
+
+
     private final static CurrencyDao currencyDao = CurrencyDao.getInstance();
 
     private final static String SAVE_EXCHANGE_RATE_SQL = """
@@ -45,10 +44,10 @@ public class ExchangeRateDao {
             WHERE id = ?
             """;
 
-    private final static String GET_BY_PAIR_SQL =GET_ALL_SQL + """
-    where bc.code = ? and tc.code = ?
-""";
-
+    private final static String GET_BY_PAIR_SQL = GET_ALL_SQL + """
+                where bc.code = ? and tc.code = ?
+            """;
+/*
     public Optional<ExchangeRate> save(String baseCurrency, String targetCurrency, BigDecimal rate) {
         try (var connection = ConnectionPool.getConnection();
              var statement = connection.prepareStatement(SAVE_EXCHANGE_RATE_SQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -60,17 +59,38 @@ public class ExchangeRateDao {
             statement.setBigDecimal(3, rate);
             statement.executeUpdate();
             var keys = statement.getGeneratedKeys();
-           if (keys.next()) {
-               return  Optional.ofNullable(new ExchangeRate(keys.getInt("id"),base,target,rate));
+            if (keys.next()) {
+                return Optional.ofNullable(new ExchangeRate(keys.getInt("id"), base, target, rate));
             }
             return Optional.empty();
         } catch (SQLException e) {
             if (UniqueConstantValidator.isUniqueConstant(e)) {
-                throw new AlreadyExistsException(ERROR_DUPLICATE_EXCHANGE_RATE_VALUES.formatted(baseCurrency+targetCurrency), e);
+                throw new AlreadyExistsException(ERROR_DUPLICATE_EXCHANGE_RATE_VALUES.formatted(baseCurrency + targetCurrency), e);
             }
             throw new DBException("Ошибка при создании курса обмена валют. Проблемы с доступом к БД! ");
         }
+    }*/
+public Optional<ExchangeRate> save(Currency baseCurrency, Currency targetCurrency, BigDecimal rate) {
+    try (var connection = ConnectionPool.getConnection();
+         var statement = connection.prepareStatement(SAVE_EXCHANGE_RATE_SQL, Statement.RETURN_GENERATED_KEYS)) {
+       // validateCurrenciesExistence(baseCurrency, targetCurrency);
+        statement.setInt(1, baseCurrency.getId());
+        statement.setInt(2, targetCurrency.getId());
+        statement.setBigDecimal(3, rate);
+        statement.executeUpdate();
+        var keys = statement.getGeneratedKeys();
+        if (keys.next()) {
+            return Optional.ofNullable(new ExchangeRate(keys.getInt("id"), baseCurrency, targetCurrency, rate));
+        }
+        return Optional.empty();
+    } catch (SQLException e) {
+        if (UniqueConstantValidator.isUniqueConstant(e)) {
+            throw new DuplicateEntryException(ERROR_UNIQUE_CONSTRAINT_VIOLATION_EXRATE_TEMPLATE.formatted(baseCurrency.getName() + targetCurrency.getName()), e);
+        }
+        throw new DBException(FAILED_TO_CREATE_EXCHANGE_RATE);
     }
+}
+
 
     public List<ExchangeRate> getAll() {
         try (var connection = ConnectionPool.getConnection();
@@ -79,22 +99,20 @@ public class ExchangeRateDao {
             List<ExchangeRate> exchangeRates = new ArrayList<>();
             var result = statement.executeQuery();
             while (result.next()) {
-                exchangeRates.add(BuilderObj.buildExchangeRate(result));
+                exchangeRates.add(DBObjectMapper.mapToExchangeRate(result));
             }
             return exchangeRates;
         } catch (SQLException e) {
-            throw new DBException("Ошибка при получение списка курса обмена валют.Проблемы с доступом к БД!");
+            throw new DBException(FAILED_TO_RETRIEVE_EXCHANGE_RATES);
         }
     }
 
-
-    public ExchangeRate update(String basecurrencycode, String targetcurrencycode, BigDecimal rate) {
+    public ExchangeRate update(String baseCurrencyCode, String targetCurrencyCode, BigDecimal rate) {
         try (var connection = ConnectionPool.getConnection();
              var statement = connection.prepareStatement(UPDATE_EXCHANGE_RATE_SQL)) {
-
-            Optional<ExchangeRate> optionalRate = getByPair(basecurrencycode, targetcurrencycode);
-            if (optionalRate.isEmpty()) {
-                throw new DBException("Курс обмена не найден для пары: " + basecurrencycode + " → " + targetcurrencycode);
+            Optional<ExchangeRate> optionalRate = getByPair(baseCurrencyCode, targetCurrencyCode);
+            if (optionalRate.isEmpty()) {   // todo why ????
+                throw new NotFoundException("Курс обмена не найден для пары: " + baseCurrencyCode + " → " + targetCurrencyCode);
             }
             ExchangeRate exchangerate = optionalRate.get();
             statement.setBigDecimal(1, rate);
@@ -103,30 +121,30 @@ public class ExchangeRateDao {
             exchangerate.setRate(rate);
             return exchangerate;
         } catch (SQLException e) {
-            throw new DBException("Ошибка при обновление курса обмена валют.Проблемы с доступом к БД!");
+            throw new DBException(FAILED_TO_UPDATE_EXCHANGE_RATE);
         }
     }
 
-    public Optional<ExchangeRate> getByPair(String basecurrencycode, String targetcurrencycode) {
+    public Optional<ExchangeRate> getByPair(String baseCurrencyCode, String targetCurrencyCode) {
         try (var connection = ConnectionPool.getConnection();
              var statement = connection.prepareStatement(GET_BY_PAIR_SQL)
         ) {
-            statement.setString(1, basecurrencycode);
-            statement.setString(2, targetcurrencycode);
+            statement.setString(1, baseCurrencyCode);
+            statement.setString(2, targetCurrencyCode);
             var result = statement.executeQuery();
             ExchangeRate exchangeRate = null;
             if (result.next()) {
-                exchangeRate = BuilderObj.buildExchangeRate(result);
+                exchangeRate = DBObjectMapper.mapToExchangeRate(result);
             }
             return Optional.ofNullable(exchangeRate);
         } catch (SQLException e) {
-            throw new DBException("Ошибка при получение пары обмена курса валют. Проблемы с доступом к БД!");
+            throw new DBException(FAILED_TO_RETRIEVE_PAIR_BY_CODE);
         }
     }
 
+    private ExchangeRateDao() {
+    }
     public static ExchangeRateDao getInstance() {
         return INSTANCE;
-    }
-    private ExchangeRateDao() {
     }
 }

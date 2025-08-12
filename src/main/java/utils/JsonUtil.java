@@ -10,7 +10,6 @@ public final class JsonUtil {
 
     private static final String ERROR_MESSAGE_JSON_NAME = "message";
     private static final ObjectMapper mapper = new ObjectMapper();
-
     private JsonUtil() {
     }
 
@@ -22,7 +21,6 @@ public final class JsonUtil {
                                                obj.getClass().getName(), e);
         }
     }
-
 
     public static String errorToJson(String errorMessage) {
         ObjectNode jsonNode = mapper.createObjectNode();

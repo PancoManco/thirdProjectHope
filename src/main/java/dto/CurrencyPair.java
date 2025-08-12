@@ -1,8 +1,8 @@
 package dto;
 
 public class CurrencyPair {
-    String baseCurrency;
-    String targetCurrency;
+    private String baseCurrency;
+    private  String targetCurrency;
 
     public CurrencyPair(String baseCurrency, String targetCurrency) {
         this.baseCurrency = baseCurrency;

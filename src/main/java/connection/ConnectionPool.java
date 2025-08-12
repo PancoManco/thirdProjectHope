@@ -4,19 +4,15 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import exception.DBException;
 import utils.PropertiesUtil;
-
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import static exception.ErrorMessages.DataBaseError.ERROR_CONNECTION_POOL;
 import static exception.ErrorMessages.DataBaseError.ERROR_LOADING_PROPERTIES;
 
 public final class ConnectionPool {
-
     private static HikariConfig config = new HikariConfig();
     private static final HikariDataSource dataSource;
-
     static {
         try {
             config.setJdbcUrl(PropertiesUtil.get("db.url"));
@@ -32,7 +28,6 @@ public final class ConnectionPool {
             throw new DBException(ERROR_LOADING_PROPERTIES);
         }
     }
-
     public static Connection getConnection() {
         try {
            return dataSource.getConnection();
@@ -42,5 +37,4 @@ public final class ConnectionPool {
     }
     private ConnectionPool() {
     }
-
 }

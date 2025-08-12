@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 
 
 public class ExchangeRate {
-    int id;
-    Currency baseCurrency;
-    Currency targetCurrency;
-    BigDecimal rate;
+    private int id;
+    private  Currency baseCurrency;
+    private Currency targetCurrency;
+    private BigDecimal rate;
 
     public ExchangeRate() {
     }

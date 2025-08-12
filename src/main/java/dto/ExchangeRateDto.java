@@ -5,21 +5,19 @@ import java.math.BigDecimal;
 
 public class ExchangeRateDto {
 
-    int id;
-    CurrencyDto baseCurrency;
-    CurrencyDto targetCurrency;
-    BigDecimal rate;
+    private int id;
+    private   CurrencyDto baseCurrency;
+    private  CurrencyDto targetCurrency;
+    private  BigDecimal rate;
 
     public ExchangeRateDto() {
     }
-
     public ExchangeRateDto(CurrencyDto baseCurrency, CurrencyDto targetCurrency, BigDecimal rate) {
         int id = this.id;
         this.baseCurrency = baseCurrency;
         this.targetCurrency = targetCurrency;
         this.rate = rate;
     }
-
     public void setId(int id) {this.id = id;}
     public int getId() {return id;}
     public CurrencyDto getBaseCurrency() {

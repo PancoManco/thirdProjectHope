@@ -1,9 +1,9 @@
 package dto;
 
 public class CurrencyDtoRequest {
-    String code;
-    String name;
-    String sign;
+    private String code;
+    private  String name;
+    private String sign;
 
     public CurrencyDtoRequest(String code, String name, String sign) {
         this.code = code;
