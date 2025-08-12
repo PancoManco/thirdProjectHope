@@ -49,7 +49,7 @@ public final class CurrencyFormatter {
     }
 
     ///  todo need to use
-    public static CurrencyDtoRequest getValidCurrencyDTO(CurrencyDtoRequest creatingRequest) {
+    public static CurrencyDtoRequest getValidCurrencyDto(CurrencyDtoRequest creatingRequest) {
         String code = getValidCode(creatingRequest.getCode());
         String fullName = getValidName(creatingRequest.getName());
         String sign = getValidSign(creatingRequest.getSign());

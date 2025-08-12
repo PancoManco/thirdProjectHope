@@ -47,29 +47,7 @@ public class ExchangeRateDao {
     private final static String GET_BY_PAIR_SQL = GET_ALL_SQL + """
                 where bc.code = ? and tc.code = ?
             """;
-/*
-    public Optional<ExchangeRate> save(String baseCurrency, String targetCurrency, BigDecimal rate) {
-        try (var connection = ConnectionPool.getConnection();
-             var statement = connection.prepareStatement(SAVE_EXCHANGE_RATE_SQL, Statement.RETURN_GENERATED_KEYS)) {
-            validateCurrenciesExistence(baseCurrency, targetCurrency);
-            Currency base = currencyDao.findByCode(baseCurrency).get();
-            Currency target = currencyDao.findByCode(targetCurrency).get();
-            statement.setInt(1, base.getId());
-            statement.setInt(2, target.getId());
-            statement.setBigDecimal(3, rate);
-            statement.executeUpdate();
-            var keys = statement.getGeneratedKeys();
-            if (keys.next()) {
-                return Optional.ofNullable(new ExchangeRate(keys.getInt("id"), base, target, rate));
-            }
-            return Optional.empty();
-        } catch (SQLException e) {
-            if (UniqueConstantValidator.isUniqueConstant(e)) {
-                throw new AlreadyExistsException(ERROR_DUPLICATE_EXCHANGE_RATE_VALUES.formatted(baseCurrency + targetCurrency), e);
-            }
-            throw new DBException("Ошибка при создании курса обмена валют. Проблемы с доступом к БД! ");
-        }
-    }*/
+
 public Optional<ExchangeRate> save(Currency baseCurrency, Currency targetCurrency, BigDecimal rate) {
     try (var connection = ConnectionPool.getConnection();
          var statement = connection.prepareStatement(SAVE_EXCHANGE_RATE_SQL, Statement.RETURN_GENERATED_KEYS)) {

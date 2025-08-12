@@ -35,6 +35,12 @@ public final class ConnectionPool {
             throw new DBException(ERROR_CONNECTION_POOL);
         }
     }
+
+    public static void close() {
+        if (dataSource != null && !dataSource.isClosed()) {
+            dataSource.close();
+        }
+    }
     private ConnectionPool() {
     }
 }

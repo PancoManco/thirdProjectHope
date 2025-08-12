@@ -39,7 +39,8 @@ public class ErrorMessages {
         public static class ExchangeRatesError {
             public static final String ERROR_UNIQUE_CONSTRAINT_VIOLATION_EXRATE_TEMPLATE="Конвертация %s уже существует!";
             public static final String UNABLE_TO_CONVERT  = "Валюта не найдена ";
-
+            public static final String EXCHANGE_RATE_NOT_FOUND_TEMPLATE =
+                    "Обменный курс для пары %s%s не найден";
             public static final String FAILED_TO_RETRIEVE_EXCHANGE_RATES = "Ошибка при получение списка курса обмена валют.Проблемы с доступом к БД!";
             public static final String FAILED_TO_CREATE_EXCHANGE_RATE = "Ошибка при создании курса обмена валют. Проблемы с доступом к БД! ";
             public static final String FAILED_TO_UPDATE_EXCHANGE_RATE = "Ошибка при обновление курса обмена валют.Проблемы с доступом к БД!";

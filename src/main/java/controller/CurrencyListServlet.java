@@ -19,7 +19,12 @@ import static utils.ServletUtil.sendResponse;
 
 @WebServlet("/currencies")
 public class CurrencyListServlet extends HttpServlet {
-    private CurrencyService currencyService = new CurrencyService();
+    private CurrencyService currencyService;
+
+    @Override
+    public void init() throws ServletException {
+        this.currencyService = (CurrencyService) getServletContext().getAttribute("currencyService");
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

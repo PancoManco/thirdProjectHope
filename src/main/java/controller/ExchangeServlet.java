@@ -19,7 +19,13 @@ import static utils.ServletUtil.sendResponse;
 
 @WebServlet("/exchange")
 public class ExchangeServlet extends HttpServlet {
-    ConversionService conversionService = new ConversionService();
+    ConversionService conversionService;
+
+    @Override
+    public void init() throws ServletException {
+        this.conversionService=(ConversionService) getServletContext().getAttribute("conversionService");
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String baseCurrencyCode = req.getParameter("from");

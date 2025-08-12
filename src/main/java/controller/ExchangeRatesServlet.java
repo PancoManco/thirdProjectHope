@@ -18,15 +18,22 @@ import java.util.List;
 
 import static utils.JsonUtil.toJson;
 import static utils.RequestParameterUtil.extractBigDecimal;
+import static utils.RequestParameterUtil.validateParameters;
 import static utils.ServletUtil.sendResponse;
 
 @WebServlet("/exchangeRates")
 public class ExchangeRatesServlet extends HttpServlet {
-    ExchangeRateService exchangeRateService = new ExchangeRateService();
+    ExchangeRateService exchangeRateService;
+
+    @Override
+    public void init() throws ServletException {
+        this.exchangeRateService = (ExchangeRateService) getServletContext().getAttribute("exchangeRateService");
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         List<ExchangeRateDto> exchangeRates = exchangeRateService.getAllExchangeRates();
-        sendResponse(resp, HttpServletResponse.SC_CREATED, toJson(exchangeRates));
+        sendResponse(resp, HttpServletResponse.SC_OK, toJson(exchangeRates));
     }
 
     @Override
@@ -34,9 +41,10 @@ public class ExchangeRatesServlet extends HttpServlet {
     String baseCurrency = req.getParameter("baseCurrencyCode");
     String targetCode = req.getParameter("targetCurrencyCode");
     String inputRate = req.getParameter("rate");
-    BigDecimal rate = extractBigDecimal(inputRate);// добавить проверку на числа
+    BigDecimal rate = extractBigDecimal(inputRate);// изменить название переменной
+        validateParameters("", baseCurrency, targetCode,inputRate); // код ошибки дописать
         ExchangeRateRequestDto exchangeRateRequestDto = new ExchangeRateRequestDto(baseCurrency, targetCode, rate);
     ExchangeRateDto exchangeRateDto =exchangeRateService.createExchangeRate(exchangeRateRequestDto);
-    sendResponse(resp,HttpServletResponse.SC_OK,toJson(exchangeRateDto));
+    sendResponse(resp,HttpServletResponse.SC_CREATED,toJson(exchangeRateDto));
     }
 }

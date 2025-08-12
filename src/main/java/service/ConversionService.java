@@ -19,15 +19,15 @@ public class ConversionService {
     ExchangeRateService exchangeRateService = new ExchangeRateService();
 
     public ConversionResponseDto convert(ConversionRequestDto conversionRequestDto) {
-        CurrencyPair codePair = ExchangeRateFormatter.getValidCurrencyPair(conversionRequestDto.getBaseCurrencyCode(),conversionRequestDto.getTargetCurrencyCode());
+        CurrencyPair codePair = ExchangeRateFormatter.validateCurrencyPair(conversionRequestDto.getBaseCurrencyCode(),conversionRequestDto.getTargetCurrencyCode());
         String baseCurrencyCode = codePair.getBaseCurrency();
         String targetCurrencyCode = codePair.getTargetCurrency();
         BigDecimal amount = conversionRequestDto.getBaseAmount();
 
-        return exchangeRateService.fetchExchangeRate(baseCurrencyCode,targetCurrencyCode)
+        return exchangeRateService.findExchangeRate(baseCurrencyCode,targetCurrencyCode)
                 .map(directExchangeRate -> createDirectConversion(directExchangeRate,amount))
                 .orElseGet(()-> exchangeRateService
-                        .fetchExchangeRate(baseCurrencyCode,targetCurrencyCode)
+                        .findExchangeRate(baseCurrencyCode,targetCurrencyCode)
                         .map(reversedExchangeRate -> createReversedConversion(reversedExchangeRate,amount))
                         .orElseGet(()->findCrossRateConversion(baseCurrencyCode,targetCurrencyCode,amount)));
 
@@ -35,11 +35,11 @@ public class ConversionService {
 
     private ConversionResponseDto findCrossRateConversion(String baseCurrencyCode, String targetCurrencyCode, BigDecimal amount) {
         ExchangeRateDto defaultBaseExchangeRate = exchangeRateService
-                .fetchExchangeRate(DEFAULT_CURRENCY_CODE, baseCurrencyCode)
+                .findExchangeRate(DEFAULT_CURRENCY_CODE, baseCurrencyCode)
                 .orElseThrow(() -> new EntityNotFoundException(UNABLE_TO_CONVERT));
 
         ExchangeRateDto defaultTargetExchangeRate = exchangeRateService
-                .fetchExchangeRate(DEFAULT_CURRENCY_CODE, targetCurrencyCode)
+                .findExchangeRate(DEFAULT_CURRENCY_CODE, targetCurrencyCode)
                 .orElseThrow(() -> new EntityNotFoundException(UNABLE_TO_CONVERT));
 
         return createCrossRateConversion(defaultBaseExchangeRate, defaultTargetExchangeRate, amount);
