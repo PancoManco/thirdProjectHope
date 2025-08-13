@@ -15,8 +15,6 @@ import static utils.JsonUtil.toJson;
 import static utils.RequestParameterUtil.extractValidatedPath;
 import static utils.ServletUtil.sendResponse;
 
-;
-
 
 @WebServlet("/currency/*")
 public class CurrencyServlet extends HttpServlet {
@@ -28,8 +26,8 @@ public class CurrencyServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
-        String code = extractValidatedPath(req,CURRENCY_CODE_MISSING);
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String code = extractValidatedPath(req, CURRENCY_CODE_MISSING);
         CurrencyDto currencyDto = currencyService.getCurrencyByCode(code);
         sendResponse(resp, HttpServletResponse.SC_OK, toJson(currencyDto));
     }

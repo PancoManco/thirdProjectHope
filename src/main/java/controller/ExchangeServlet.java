@@ -12,6 +12,7 @@ import service.ConversionService;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import static exception.ErrorMessages.ParameterError.CURRENCY_CODE_MISSING;
 import static utils.JsonUtil.toJson;
 import static utils.RequestParameterUtil.extractBigDecimal;
 import static utils.RequestParameterUtil.validateParameters;
@@ -23,7 +24,7 @@ public class ExchangeServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        this.conversionService=(ConversionService) getServletContext().getAttribute("conversionService");
+        this.conversionService = (ConversionService) getServletContext().getAttribute("conversionService");
     }
 
     @Override
@@ -31,12 +32,12 @@ public class ExchangeServlet extends HttpServlet {
         String baseCurrencyCode = req.getParameter("from");
         String targetCurrencyCode = req.getParameter("to");
         String inputAmount = req.getParameter("amount");
-        validateParameters(baseCurrencyCode, targetCurrencyCode, inputAmount);
+        validateParameters(CURRENCY_CODE_MISSING, baseCurrencyCode, targetCurrencyCode); // дописать ошибку
         BigDecimal inputAmountBigDecimal = extractBigDecimal(inputAmount);
-        ConversionRequestDto requestDto = new ConversionRequestDto(baseCurrencyCode,targetCurrencyCode,inputAmountBigDecimal);
+        ConversionRequestDto requestDto = new ConversionRequestDto(baseCurrencyCode, targetCurrencyCode, inputAmountBigDecimal);
 
-        ConversionResponseDto  responseDto =conversionService.convert(requestDto);
-        sendResponse(resp,HttpServletResponse.SC_OK,toJson(responseDto));
+        ConversionResponseDto responseDto = conversionService.convert(requestDto);
+        sendResponse(resp, HttpServletResponse.SC_OK, toJson(responseDto));
     }
 
 }

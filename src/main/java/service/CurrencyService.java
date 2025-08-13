@@ -11,9 +11,10 @@ import model.Currency;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static exception.ErrorMessages.CURRENCY_NOT_FOUND_MESSAGE_TEMPLATE;
+import static exception.ErrorMessages.CurrencyError.CURRENCY_NOT_FOUND_MESSAGE_TEMPLATE;
 
 public class CurrencyService {
+
     private final CurrencyDao dao = CurrencyDao.getInstance();
     private final CurrencyMapper mapper = CurrencyMapper.INSTANCE;
 
@@ -22,17 +23,18 @@ public class CurrencyService {
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
+
     public CurrencyDto getCurrencyByCode(String code) {
         return mapper.toDto(
                 dao.findByCode(code).orElseThrow(() -> new EntityNotFoundException(CURRENCY_NOT_FOUND_MESSAGE_TEMPLATE.formatted(code)))
         );
     }
-public CurrencyDto save(CurrencyDtoRequest currencyDto) {
-        CurrencyDtoRequest validRequestDto = CurrencyFormatter.getValidCurrencyDto(currencyDto);
- //   CurrencyFormatter.validateCurrencyDto(currencyDto); // просто проверка //Todo  ???
-    Currency currencyToSave = mapper.toEntityFromRequest(validRequestDto);
-    Currency savedCurrency = dao.save(currencyToSave).get();
-    return mapper.toDto(savedCurrency);
-}
 
+    public CurrencyDto save(CurrencyDtoRequest currencyDto) {
+        CurrencyDtoRequest validRequestDto = CurrencyFormatter.getValidCurrencyDto(currencyDto);
+        //   CurrencyFormatter.validateCurrencyDto(currencyDto); // просто проверка //Todo  ???
+        Currency currencyToSave = mapper.toEntityFromRequest(validRequestDto);
+        Currency savedCurrency = dao.save(currencyToSave).get();
+        return mapper.toDto(savedCurrency);
+    }
 }

@@ -33,11 +33,11 @@ public class CurrencyListServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String name = req.getParameter("name");
         String code = req.getParameter("code");
         String sign = req.getParameter("sign");
-        validateParameters(REQUIRED_FORM_FIELD_MISSING,code, name, sign);
+        validateParameters(REQUIRED_FORM_FIELD_MISSING, code, name, sign);
         CurrencyDtoRequest currencyDto = new CurrencyDtoRequest(code, name, sign);
         CurrencyDto currency = currencyService.save(currencyDto);
         sendResponse(resp, HttpServletResponse.SC_CREATED, toJson(currency));

@@ -2,7 +2,7 @@ package Formatter;
 
 import dao.CurrencyDao;
 import dto.CurrencyDtoRequest;
-import exception.NotFoundException;
+import exception.EntityNotFoundException;
 import model.Currency;
 
 import java.security.InvalidParameterException;
@@ -41,12 +41,6 @@ public final class CurrencyFormatter {
         }
         return sign;
     }
-// todo ????
-    public static void validateCurrencyDto(CurrencyDtoRequest currencyDto) {
-        getValidCode(currencyDto.getCode());
-        getValidName(currencyDto.getName());
-        getValidSign(currencyDto.getSign());
-    }
 
     ///  todo need to use
     public static CurrencyDtoRequest getValidCurrencyDto(CurrencyDtoRequest creatingRequest) {
@@ -56,12 +50,12 @@ public final class CurrencyFormatter {
 
         return new CurrencyDtoRequest(code, fullName, sign);
     }
-
+    // todo
     public static void validateCurrenciesExistence(String baseCurrency, String targetCurrency)  {
         Optional<Currency> baseOpt = currencyDao.findByCode(baseCurrency);
         Optional<Currency> targetOpt = currencyDao.findByCode(targetCurrency);
         if (!baseOpt.isPresent() || !targetOpt.isPresent()) {
-            throw new NotFoundException("Валюта '" + baseCurrency + "' или '" + targetCurrency + "' отсутствует в базе данных. Од");
+            throw new EntityNotFoundException("Валюта '" + baseCurrency + "' или '" + targetCurrency + "' отсутствует в базе данных. Од");
         }
     }
 

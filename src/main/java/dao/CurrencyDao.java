@@ -1,17 +1,17 @@
 package dao;
 
 import connection.ConnectionPool;
-import exception.DuplicateEntryException;
 import exception.DBException;
+import exception.DuplicateEntryException;
 import mapper.DBObjectMapper;
 import model.Currency;
 import utils.UniqueConstantValidator;
+
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 
 import static exception.ErrorMessages.CurrencyError.*;
 import static exception.ErrorMessages.ParameterError.ERROR_UNIQUE_CONSTRAINT_VIOLATION_CURRENCY;
@@ -31,6 +31,13 @@ public class CurrencyDao {
             where code = ?
             """;
 
+    private CurrencyDao() {
+    }
+
+    public static CurrencyDao getInstance() {
+        return INSTANCE;
+    }
+
     public Optional<Currency> save(Currency currency) {
         try (var connection = ConnectionPool.getConnection();
              var statement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS);
@@ -48,7 +55,7 @@ public class CurrencyDao {
             if (UniqueConstantValidator.isUniqueConstant(e)) {
                 throw new DuplicateEntryException(ERROR_UNIQUE_CONSTRAINT_VIOLATION_CURRENCY.formatted(currency.getCode()), e);
             }
-            throw new DBException(ERROR_SAVING_CURRENCY_TEMPLATE.formatted(currency.getCode(),currency.getName(),e.getMessage()));
+            throw new DBException(ERROR_SAVING_CURRENCY_TEMPLATE.formatted(currency.getCode(), currency.getName(), e.getMessage()));
         }
     }
 
@@ -63,9 +70,10 @@ public class CurrencyDao {
             }
             return currencies;
         } catch (SQLException e) {
-            throw new DBException(ERROR_GETTING_CURRENCIES_LIST_TEMPLATE.formatted(GET_ALL_SQL,e.getMessage()));
+            throw new DBException(ERROR_GETTING_CURRENCIES_LIST_TEMPLATE.formatted(GET_ALL_SQL, e.getMessage()));
         }
     }
+
     public Optional<Currency> findByCode(String code) {
         try (var connection = ConnectionPool.getConnection();
              var statement = connection.prepareStatement(GET_BY_CODE_SQL)
@@ -78,12 +86,7 @@ public class CurrencyDao {
             }
             return Optional.ofNullable(currency);
         } catch (SQLException e) {
-            throw new DBException(ERROR_FINDING_CURRENCY_BY_CODE_TEMPLATE.formatted(code,e.getMessage()));
+            throw new DBException(ERROR_FINDING_CURRENCY_BY_CODE_TEMPLATE.formatted(code, e.getMessage()));
         }
-    }
-    public static CurrencyDao getInstance() {
-        return INSTANCE;
-    }
-    private CurrencyDao() {
     }
 }

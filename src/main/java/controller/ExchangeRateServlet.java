@@ -11,6 +11,8 @@ import service.ExchangeRateService;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+import static exception.ErrorMessages.ExchangeRatesError.EXCHANGE_PAIR_CODE_MISSING;
+import static exception.ErrorMessages.ParameterError.REQUIRED_FORM_FIELD_MISSING;
 import static utils.JsonUtil.toJson;
 import static utils.RequestParameterUtil.*;
 import static utils.ServletUtil.sendResponse;
@@ -21,15 +23,16 @@ public class ExchangeRateServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-       this.exchangeRateService = (ExchangeRateService) getServletContext().getAttribute("exchangeRateService");
+        this.exchangeRateService = (ExchangeRateService) getServletContext().getAttribute("exchangeRateService");
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    String codes = extractValidatedPath(req,"Код валюты пары отсутсвует в адресе"); //todo
-    ExchangeRateDto exchangeRate = exchangeRateService.findExchangeRateByCode(codes);
+        String codes = extractValidatedPath(req, "Код валюты пары отсутсвует в адресе"); //todo
+        ExchangeRateDto exchangeRate = exchangeRateService.findExchangeRateByCode(codes);
         sendResponse(resp, HttpServletResponse.SC_OK, toJson(exchangeRate));
     }
+
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getMethod();
@@ -42,9 +45,9 @@ public class ExchangeRateServlet extends HttpServlet {
 
     @Override
     protected void doPatch(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String codes = extractValidatedPath(req,"Код валюты пары отсутвует в запросе"); // todo
+        String codes = extractValidatedPath(req, EXCHANGE_PAIR_CODE_MISSING);
         String inputRate = getRateParameter(req);
-        validateParameters("Отсутвует нужное поле формы", inputRate); // todo
+        validateParameters(REQUIRED_FORM_FIELD_MISSING, inputRate);
         BigDecimal rate = extractBigDecimal(inputRate);
         ExchangeRateDto exchangeRate = exchangeRateService.updateExchangeRate(codes, rate);
         sendResponse(resp, HttpServletResponse.SC_OK, toJson(exchangeRate));

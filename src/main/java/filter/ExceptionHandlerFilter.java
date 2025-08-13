@@ -1,9 +1,9 @@
 package filter;
 
-import exception.DuplicateEntryException;
 import exception.DBException;
+import exception.DuplicateEntryException;
 import exception.EmptyException;
-import exception.NotFoundException;
+import exception.EntityNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebFilter;
@@ -27,15 +27,15 @@ public class ExceptionHandlerFilter extends HttpFilter {
             sendErrorResponse(res, HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         } catch (DBException e) {
             sendErrorResponse(res, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
-        } catch (NotFoundException e) {
+        } catch (EntityNotFoundException e) {
             sendErrorResponse(res, HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         } catch (DuplicateEntryException e) {
             sendErrorResponse(res, HttpServletResponse.SC_CONFLICT, e.getMessage());
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             sendErrorResponse(res, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
+
     private void sendErrorResponse(HttpServletResponse res, int statusCode, String message) throws IOException {
         sendResponse(res, statusCode, errorToJson(message));
     }

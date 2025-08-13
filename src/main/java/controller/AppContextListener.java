@@ -3,10 +3,12 @@ package controller;
 import connection.ConnectionPool;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.annotation.WebListener;
 import service.ConversionService;
 import service.CurrencyService;
 import service.ExchangeRateService;
 
+@WebListener
 public class AppContextListener implements ServletContextListener {
 
     @Override
@@ -14,7 +16,6 @@ public class AppContextListener implements ServletContextListener {
         CurrencyService currencyService = new CurrencyService();
         ExchangeRateService exchangeRateService = new ExchangeRateService();
         ConversionService conversionService = new ConversionService();
-
         sce.getServletContext().setAttribute("currencyService", currencyService);
         sce.getServletContext().setAttribute("exchangeRateService", exchangeRateService);
         sce.getServletContext().setAttribute("conversionService", conversionService);
