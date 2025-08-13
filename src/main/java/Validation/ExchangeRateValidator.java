@@ -1,4 +1,4 @@
-package Formatter;
+package Validation;
 
 import dto.ConversionRequestDto;
 import dto.CurrencyPair;
@@ -8,10 +8,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.InvalidParameterException;
 
-import static Formatter.CurrencyFormatter.getValidCode;
+import static Validation.CurrencyValidator.getValidCode;
 import static exception.ErrorMessages.ParameterError.*;
 
-public final class ExchangeRateFormatter {
+public final class ExchangeRateValidator {
 
     private static final int CURRENCY_CODE_LENGTH = 3;
     private static final int CURRENCY_PAIR_LENGTH = 6;
@@ -77,21 +77,21 @@ public final class ExchangeRateFormatter {
         }
     }
 
-    private static BigDecimal getValidRoundedRate(BigDecimal exchangeRate) { // поменять названия
+    private static BigDecimal getValidRoundedRate(BigDecimal exchangeRate) {
         BigDecimal scaled = exchangeRate.setScale(SCALE_RATE, RoundingMode.HALF_EVEN);
         return checkNumberInRange(scaled, MIN_RATE, MAX_RATE);
     }
 
-    private static BigDecimal getValidAmount(BigDecimal amountToExchange) { // поменять названия
+    private static BigDecimal getValidAmount(BigDecimal amountToExchange) {
         return checkNumberInRange(amountToExchange, MIN_AMOUNT, MAX_AMOUNT);
     }
 
-    private static BigDecimal checkNumberInRange(BigDecimal value, BigDecimal min, BigDecimal max) { // поменять названия
+    private static BigDecimal checkNumberInRange(BigDecimal value, BigDecimal min, BigDecimal max) {
         if (value.compareTo(min) < 0 || value.compareTo(max) > 0) {
             throw new InvalidParameterException(NUMBER_NOT_IN_RANGE_TEMPLATE.formatted(min, max));
         }
         return value;
     }
 
-    private ExchangeRateFormatter() {}
+    private ExchangeRateValidator() {}
 }

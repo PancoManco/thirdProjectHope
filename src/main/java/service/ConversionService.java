@@ -1,6 +1,6 @@
 package service;
 
-import Formatter.ExchangeRateFormatter;
+import Validation.ExchangeRateValidator;
 import dto.ConversionRequestDto;
 import dto.ConversionResponseDto;
 import dto.ExchangeRateDto;
@@ -20,7 +20,7 @@ public class ConversionService {
     ExchangeRateService exchangeRateService = new ExchangeRateService();
 
     public ConversionResponseDto convert(ConversionRequestDto conversionRequestDto) {
-        ConversionRequestDto request = ExchangeRateFormatter.buildValidatedConversionRequestDto(conversionRequestDto);
+        ConversionRequestDto request = ExchangeRateValidator.buildValidatedConversionRequestDto(conversionRequestDto);
         //    CurrencyPair codePair = ExchangeRateFormatter.validateCurrencyPair(conversionRequestDto.getBaseCurrencyCode(),conversionRequestDto.getTargetCurrencyCode());
         String baseCurrencyCode = request.getBaseCurrencyCode();
         String targetCurrencyCode = request.getTargetCurrencyCode();

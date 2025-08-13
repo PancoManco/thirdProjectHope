@@ -1,6 +1,6 @@
 package service;
 
-import Formatter.ExchangeRateFormatter;
+import Validation.ExchangeRateValidator;
 import dao.CurrencyDao;
 import dao.ExchangeRateDao;
 import dto.CurrencyPair;
@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static Formatter.ExchangeRateFormatter.buildValidatedExchangeRateDto;
-import static Formatter.ExchangeRateFormatter.buildValidatedExchangeRateDtoFromString;
+import static Validation.ExchangeRateValidator.buildValidatedExchangeRateDto;
+import static Validation.ExchangeRateValidator.buildValidatedExchangeRateDtoFromString;
 import static exception.ErrorMessages.CurrencyError.CURRENCY_NOT_FOUND_MESSAGE_TEMPLATE;
 import static exception.ErrorMessages.ExchangeRatesError.EXCHANGE_RATE_NOT_FOUND_TEMPLATE;
 
@@ -35,7 +35,7 @@ public class ExchangeRateService {
     }
 
     public ExchangeRateDto findExchangeRateByCode(String inputCodes) {
-        CurrencyPair codePair = ExchangeRateFormatter.parseCurrencyPair(inputCodes);
+        CurrencyPair codePair = ExchangeRateValidator.parseCurrencyPair(inputCodes);
         return dao.getByPair(codePair.getBaseCurrency(), codePair.getTargetCurrency())
                 .map(mapper::toDto)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(EXCHANGE_RATE_NOT_FOUND_TEMPLATE.formatted(codePair.getBaseCurrency(), codePair.getTargetCurrency()))));
@@ -70,9 +70,5 @@ public class ExchangeRateService {
                 .orElseThrow(() -> new EntityNotFoundException(EXCHANGE_RATE_NOT_FOUND_TEMPLATE.formatted(baseCurrencyCode, targetCurrencyCode))));
     }
 
-//    public Optional<ExchangeRateDto> findExchangeRate(String baseCurrencyCode, String targetCurrencyCode) {
-//        Optional<ExchangeRate> optExchangeRate = dao.getByPair(baseCurrencyCode, targetCurrencyCode);
-//        return optExchangeRate.map(ExchangeRateMapper.INSTANCE::toDto);
-//    }
 
 }

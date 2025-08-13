@@ -26,7 +26,7 @@ public final class RequestParameterUtil {
     }
 
     public static BigDecimal extractBigDecimal(String parameter) {
-        validateParameters(REQUIRED_FORM_FIELD_MISSING, parameter); // todo ???
+        validateParameters(REQUIRED_FORM_FIELD_MISSING, parameter);
         parameter = parameter.replace(",", ".").replaceAll("\\s", "");
         BigDecimal number;
         try {
@@ -53,20 +53,16 @@ public final class RequestParameterUtil {
         while (reader.ready()) {
             formBody.append(reader.readLine());
         }
-
         Pattern pattern = Pattern.compile("rate=(.*?)(&|$)");
         Matcher matcher = pattern.matcher(formBody.toString());
-
         if (matcher.find()) {
-            stringRate = matcher.group(1); // Получаем первое найденное значение
+            stringRate = matcher.group(1);
         }
 
-        // Замена запятых на точки (для универсального представления дробных чисел)
         stringRate = stringRate.replace(',', '.');
 
-        // Удаляем все неприемлемые символы, оставляя только цифры и точку
         stringRate = stringRate.replaceAll("[^\\d.-]", "");
 
-        return stringRate.trim(); // Возвращаем очищенное число
+        return stringRate.trim();
     }
 }

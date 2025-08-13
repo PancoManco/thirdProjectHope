@@ -28,7 +28,7 @@ public class ExchangeRateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String codes = extractValidatedPath(req, "Код валюты пары отсутсвует в адресе"); //todo
+        String codes = extractValidatedPath(req, EXCHANGE_PAIR_CODE_MISSING);
         ExchangeRateDto exchangeRate = exchangeRateService.findExchangeRateByCode(codes);
         sendResponse(resp, HttpServletResponse.SC_OK, toJson(exchangeRate));
     }
