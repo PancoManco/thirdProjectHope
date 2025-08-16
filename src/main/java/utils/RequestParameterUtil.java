@@ -58,11 +58,8 @@ public final class RequestParameterUtil {
         if (matcher.find()) {
             stringRate = matcher.group(1);
         }
-
         stringRate = stringRate.replace(',', '.');
-
         stringRate = stringRate.replaceAll("[^\\d.-]", "");
-
         return stringRate.trim();
     }
 }

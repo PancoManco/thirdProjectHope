@@ -49,7 +49,6 @@ public class ExchangeRateService {
                 .orElseThrow(() -> new EntityNotFoundException(CURRENCY_NOT_FOUND_MESSAGE_TEMPLATE + request.getBaseCurrencyCode()+request.getTargetCurrencyCode()));
         Currency targetCurrency = currencyDao.findByCode(request.getTargetCurrencyCode())
                 .orElseThrow(() -> new EntityNotFoundException(CURRENCY_NOT_FOUND_MESSAGE_TEMPLATE + request.getBaseCurrencyCode()+request.getTargetCurrencyCode()));
-
         ExchangeRate savedRate = dao.save(
                 baseCurrency,
                 targetCurrency,
@@ -59,7 +58,6 @@ public class ExchangeRateService {
 
     public ExchangeRateDto updateExchangeRate(String inputCodes, BigDecimal newRate) {
         ExchangeRateRequestDto request = buildValidatedExchangeRateDtoFromString(inputCodes, newRate);
-      //  CurrencyPair codePair = ExchangeRateFormatter.parseCurrencyPair(inputCodes);
         ExchangeRate exchangeRate = dao.update(request.getBaseCurrencyCode(), request.getTargetCurrencyCode(), newRate);
         return mapper.toDto(exchangeRate);
     }

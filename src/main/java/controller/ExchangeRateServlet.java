@@ -22,7 +22,7 @@ public class ExchangeRateServlet extends HttpServlet {
     private ExchangeRateService exchangeRateService;
 
     @Override
-    public void init() throws ServletException {
+    public void init()  {
         this.exchangeRateService = (ExchangeRateService) getServletContext().getAttribute("exchangeRateService");
     }
 

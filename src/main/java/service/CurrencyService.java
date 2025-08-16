@@ -32,7 +32,6 @@ public class CurrencyService {
 
     public CurrencyDto save(CurrencyDtoRequest currencyDto) {
         CurrencyDtoRequest validRequestDto = CurrencyValidator.getValidCurrencyDto(currencyDto);
-        //   CurrencyFormatter.validateCurrencyDto(currencyDto); //
         Currency currencyToSave = mapper.toEntityFromRequest(validRequestDto);
         Currency savedCurrency = dao.save(currencyToSave).get();
         return mapper.toDto(savedCurrency);

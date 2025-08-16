@@ -9,8 +9,6 @@ import static exception.ErrorMessages.ParameterError.*;
 
 public final class CurrencyValidator {
 
-  // private static CurrencyDao currencyDao= CurrencyDao.getInstance();
-
     public static String getValidCode(String code) {
         code = code.trim();
         Pattern pattern = Pattern.compile("^[A-Z]{3}$");
@@ -46,14 +44,6 @@ public final class CurrencyValidator {
 
         return new CurrencyDtoRequest(code, fullName, sign);
     }
-
-//    public static void CurrenciesExistence(String baseCurrency, String targetCurrency)  {
-//        Optional<Currency> baseOpt = currencyDao.findByCode(baseCurrency);
-//        Optional<Currency> targetOpt = currencyDao.findByCode(targetCurrency);
-//        if (!baseOpt.isPresent() || !targetOpt.isPresent()) {
-//            throw new EntityNotFoundException("Валюта '" + baseCurrency + "' или '" + targetCurrency + "' отсутствует в базе данных. Од");
-//        }
-//    }
 
     private CurrencyValidator() {
     }

@@ -10,7 +10,4 @@ import org.mapstruct.factory.Mappers;
 public interface ExchangeRateMapper {
     ExchangeRateMapper INSTANCE = Mappers.getMapper(ExchangeRateMapper.class);
     ExchangeRateDto toDto(ExchangeRate exchangeRate);
-    ExchangeRate toEntity(ExchangeRateDto dto);
-    ExchangeRate toEntity(ExchangeRateRequestDto requestDto);
-    ExchangeRate toEntityFromRequest(ExchangeRateRequestDto dtoRequest);
 }

@@ -3,6 +3,8 @@ package connection;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import exception.DBException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utils.PropertiesUtil;
 import java.sql.Connection;
 import java.sql.SQLException;

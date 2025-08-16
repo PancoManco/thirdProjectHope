@@ -56,7 +56,6 @@ public class ExchangeRateDao {
     public Optional<ExchangeRate> save(Currency baseCurrency, Currency targetCurrency, BigDecimal rate) {
         try (var connection = ConnectionPool.getConnection();
              var statement = connection.prepareStatement(SAVE_EXCHANGE_RATE_SQL, Statement.RETURN_GENERATED_KEYS)) {
-            // validateCurrenciesExistence(baseCurrency, targetCurrency);
             statement.setInt(1, baseCurrency.getId());
             statement.setInt(2, targetCurrency.getId());
             statement.setBigDecimal(3, rate);

@@ -17,16 +17,15 @@ public final class ExchangeRateValidator {
     private static final int CURRENCY_PAIR_LENGTH = 6;
 
     public static final BigDecimal MIN_RATE = new BigDecimal("0.000001");
-    public static final BigDecimal MAX_RATE = new BigDecimal("1000000");
+    public static final BigDecimal MAX_RATE = new BigDecimal("10000000");
     public static final int SCALE_RATE = 6;
 
     public static final BigDecimal MIN_AMOUNT = new BigDecimal("0.01");
-    public static final BigDecimal MAX_AMOUNT = new BigDecimal("9999999");
+    public static final BigDecimal MAX_AMOUNT = new BigDecimal("10000000");
 
     public static ConversionRequestDto buildValidatedConversionRequestDto(ConversionRequestDto dto) {
         CurrencyPair pair = validateCurrencyPair(dto.getBaseCurrencyCode(), dto.getTargetCurrencyCode());
         BigDecimal amount = getValidAmount(dto.getBaseAmount());
-        //  validateCurrenciesAreDifferent(pair.getBaseCurrency(), pair.getTargetCurrency());
         return new ConversionRequestDto(pair.getBaseCurrency(), pair.getTargetCurrency(), amount);
     }
 
@@ -40,7 +39,6 @@ public final class ExchangeRateValidator {
         BigDecimal rate = getValidRoundedRate(inputRate);
         return new ExchangeRateRequestDto(baseCurrencyCode, targetCurrencyCode, rate);
     }
-
 
     public static ExchangeRateRequestDto buildValidatedExchangeRateDtoFromString(String inputCodes, BigDecimal inputRate) {
         CurrencyPair pair = parseCurrencyPair(inputCodes);

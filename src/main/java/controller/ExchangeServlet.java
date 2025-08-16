@@ -32,7 +32,7 @@ public class ExchangeServlet extends HttpServlet {
         String baseCurrencyCode = req.getParameter("from");
         String targetCurrencyCode = req.getParameter("to");
         String inputAmount = req.getParameter("amount");
-        validateParameters(CURRENCY_CODE_MISSING, baseCurrencyCode, targetCurrencyCode); // дописать ошибку
+        validateParameters(CURRENCY_CODE_MISSING, baseCurrencyCode, targetCurrencyCode);
         BigDecimal inputAmountBigDecimal = extractBigDecimal(inputAmount);
         ConversionRequestDto requestDto = new ConversionRequestDto(baseCurrencyCode, targetCurrencyCode, inputAmountBigDecimal);
 

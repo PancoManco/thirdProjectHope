@@ -21,7 +21,6 @@ public class ConversionService {
 
     public ConversionResponseDto convert(ConversionRequestDto conversionRequestDto) {
         ConversionRequestDto request = ExchangeRateValidator.buildValidatedConversionRequestDto(conversionRequestDto);
-        //    CurrencyPair codePair = ExchangeRateFormatter.validateCurrencyPair(conversionRequestDto.getBaseCurrencyCode(),conversionRequestDto.getTargetCurrencyCode());
         String baseCurrencyCode = request.getBaseCurrencyCode();
         String targetCurrencyCode = request.getTargetCurrencyCode();
         BigDecimal amount = request.getBaseAmount();
